@@ -1,13 +1,17 @@
-import discord as d
-import twitch
+import discord
 
-helix = twitch.Helix('nko3em2c413ryes2p2ntgz7an4m7i0','lcexkl5x47e3oqqxt57va40y1jc03u')
+client = discord.Client()
 
-class MyClient(d.Client):
-    async def on_ready(self):
-        print('Successfully Connected')
-        await client.change_presence(activity=d.Game("Message me for help"))
+@client.event
+async def on_ready():
+    print('We have logged in as {0.user}'.format(client))
 
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
 
-client = MyClient()
-client.run('')
+    if message.content.startswith('$hello'):
+        await message.channel.send('Hello!')
+
+client.run('ODM0MjA0MDg1MzU0NzU4MTY1.YH9fGA.niuPLQf2pf00IpQApzqvofvHt_k')
