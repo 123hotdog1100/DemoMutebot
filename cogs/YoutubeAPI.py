@@ -13,7 +13,6 @@ def check(Username):
         forUsername=Username
     )
     response = request.execute()
-    print(response)
     for item in response['items']:
         id = item['id']
 
@@ -41,7 +40,6 @@ def latestvid(id):
         type='video'
     )
     response = request.execute()
-    print(response)
     for item in response['items']:
         vid = item['id']['videoId']
         return vid

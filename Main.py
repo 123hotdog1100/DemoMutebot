@@ -39,12 +39,16 @@ async def Youtube():
     print("Checking Youtube")
     num = YoutubeAPI.check('123hotdog1100')
     num = int(num)
-    print(num)
+    print("Checked value: ", num, "Cached Value: ", store)
     if num > store:
         test = "Demomute Just uploaded!! ", YoutubeAPI.conversion("demomute"), " <@&834169017480642572>"
         str = ''.join(test)
-
         await send(str)
+        store = num
+    elif num < store:
+        store = num
+    else:
+        pass
 
 
 # client.load_extension("cogs.loop")
