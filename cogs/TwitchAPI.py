@@ -9,7 +9,7 @@ OAUTHHEADERS = {'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET, 'grant_t
 OAUTHURL = "https://id.twitch.tv/oauth2/token"
 
 
-def getOauth():
+def getOauth():##This function gets the oauth2 token which is required for interacting with the twitchAPI
     try:
         req = requests.post(OAUTHURL, OAUTHHEADERS)
         jsondata = req.json()
@@ -20,8 +20,7 @@ def getOauth():
         print(e)
 
 
-def checkUser(userID):
-    print(BASE_URL, "demomute")
+def checkUser(userID):##Checks to see if someone is live
 
     try:
         req = requests.get(BASE_URL, HEADERS)
@@ -36,7 +35,7 @@ def checkUser(userID):
         return False
 
 
-def getUserID(Username, OAUTH):
+def getUserID(Username, OAUTH):##Gets the USERSID based on the Username they are given and also uses the OAUTH token generated above
     HEADERS = {'client-id': CLIENT_ID, 'Authorization': 'Bearer ' + OAUTH}
     print(HEADERS)
     URL = BASE_URL + "users?login="
