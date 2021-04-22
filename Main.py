@@ -6,7 +6,7 @@ import cogs.TwitchAPI as TwitchAPI
 import cogs.YoutubeAPI as YoutubeAPI
 import dotenv
 import os
-import time
+
 global store
 store = 0
 prefix = '$'
