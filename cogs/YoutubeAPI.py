@@ -1,7 +1,7 @@
 from googleapiclient.discovery import build
 import dotenv
 
-api_key = 'AIzaSyDtwKl2tY4NXdKRrJ139yLvUKk7qQD2vww'
+api_key = dotenv.get_key(".env", "GOOGLEAPI")
 
 youtube = build('youtube', 'v3', developerKey=api_key)
 
@@ -44,7 +44,6 @@ def latestvid(id):
     for item in response['items']:
         vid = item['id']['videoId']
         return vid
-#latestvid("UCQawg27ajRWDNuN-0ieeOrw")
 
 def conversion(Username):
     BASE_URL = "https://www.youtube.com/watch?v="

@@ -45,14 +45,14 @@ async def send(message):
     await channel.send(message)
 
 
-YT = False
+YT = dotenv.get_key(".env","YTVIDNOT")
+print("Youtube video Notifications set to: " + YT)
 
 
 @tasks.loop(seconds=30)
 async def Youtube():
     global store
-    if YT == True:
-        # mentionYT = get(client. name="YT Alerts")
+    if YT == "True":
         print("Checking Youtube")
         num = YoutubeAPI.check('123hotdog1100')
         num = int(num)
