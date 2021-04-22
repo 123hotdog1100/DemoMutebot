@@ -17,7 +17,7 @@ if os.path.isfile(".env"):
     print("Discovered .env File")
 else:
     print(".env file not found creating now")
-    key = input("Please input your API key for the bot: ")
+    #key = input("Please input your API key for the bot: ")
     with open(".env", "a") as f:
         f.write("APIKEY=")
         f.write(key + "\n")
