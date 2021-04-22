@@ -5,12 +5,24 @@ from discord.utils import get
 import cogs.TwitchAPI as TwitchAPI
 import cogs.YoutubeAPI as YoutubeAPI
 import dotenv
-
+import os
+import time
 global store
 store = 0
 prefix = '$'
 
 client = commands.Bot(command_prefix=prefix)
+
+if os.path.isfile(".env"):
+    print("Discovered .env File")
+else:
+    print(".env file not found creating now")
+    key = input("Please input your API key for the bot: ")
+    with open(".env", "a") as f:
+        f.write("APIKEY=")
+        f.write(key + "\n")
+        f.write("LIVENOT=\n")
+        f.close()
 
 
 @client.event
@@ -67,5 +79,5 @@ async def on_message(message):
 
 try:
     client.run(dotenv.get_key(".env", "APIKEY"))
-except RuntimeError:
-    print("Bot shutdown")
+except discord.errors.LoginFailure:
+    print("Please add a token to the .env")
