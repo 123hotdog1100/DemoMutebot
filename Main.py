@@ -4,6 +4,7 @@ from discord.ext import commands, tasks
 from discord.utils import get
 import cogs.TwitchAPI as TwitchAPI
 import cogs.YoutubeAPI as YoutubeAPI
+import dotenv
 
 global store
 store = 0
@@ -32,26 +33,39 @@ async def send(message):
     await channel.send(message)
 
 
+YT = False
+
+
 @tasks.loop(seconds=30)
 async def Youtube():
     global store
-    # mentionYT = get(client. name="YT Alerts")
-    print("Checking Youtube")
-    num = YoutubeAPI.check('123hotdog1100')
-    num = int(num)
-    print("Checked value: ", num, "Cached Value: ", store)
-    if num > store:
-        test = "Demomute Just uploaded!! ", YoutubeAPI.conversion("demomute"), " <@&834169017480642572>"
-        str = ''.join(test)
-        await send(str)
-        store = num
-    elif num < store:
-        store = num
-    else:
-        pass
+    if YT == True:
+        # mentionYT = get(client. name="YT Alerts")
+        print("Checking Youtube")
+        num = YoutubeAPI.check('123hotdog1100')
+        num = int(num)
+        print("Checked value: ", num, "Cached Value: ", store)
+        if num > store:
+            test = "Demomute Just uploaded!! ", YoutubeAPI.conversion("demomute"), " <@&834169017480642572>"
+            str = ''.join(test)
+            await send(str)
+            store = num
+        elif num < store:
+            store = num
+        else:
+            pass
 
 
 # client.load_extension("cogs.loop")
+async def on_message(message):
+    await client.process_commands(message)
+    if message.channel.id == message.author.dm_channel:
+        await message.author.send("Received your message")
+    elif not message.guid:
+        await message.author.send("Received your message")
 
 
-client.run('ODM0MjA0MDg1MzU0NzU4MTY1.YH9fGA.niuPLQf2pf00IpQApzqvofvHt_k')
+try:
+    client.run(dotenv.get_key(".env", "APIKEY"))
+except RuntimeError:
+    print("Bot shutdown")

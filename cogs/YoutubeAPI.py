@@ -51,6 +51,3 @@ def conversion(Username):
     VIDURL = BASE_URL, VIDID
     str = ''.join(VIDURL)
     return str
-
-print(conversion("demomute"))
-
