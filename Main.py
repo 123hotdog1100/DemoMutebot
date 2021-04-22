@@ -6,11 +6,11 @@ from cogs import TwitchAPI as TwitchAPI
 from cogs import YoutubeAPI as YoutubeAPI
 import dotenv
 import os
+import sys
 
 global store
 store = 0
 prefix = '$'
-
 client = commands.Bot(command_prefix=prefix)
 
 if os.path.isfile(".env"):
@@ -39,11 +39,9 @@ async def shutdown(ctx):
     Youtube.stop
     await client.close()
 
-
-async def send(message):
+async def send(self, message):
     channel = client.get_channel(834168559843147816)
     await channel.send(message)
-
 
 YT = dotenv.get_key(".env","YTVIDNOT")
 print("Youtube video Notifications set to: " + YT)
@@ -69,15 +67,11 @@ async def Youtube():
 
 
 # client.load_extension("cogs.loop")
-async def on_message(message):
-    await client.process_commands(message)
-    if message.channel.id == message.author.dm_channel:
-        await message.author.send("Received your message")
-    elif not message.guid:
-        await message.author.send("Received your message")
+client.load_extension("cogs.Private_Messages")
 
 
 try:
     client.run(dotenv.get_key(".env", "APIKEY"))
 except discord.errors.LoginFailure:
     print("Please add a token to the .env")
+

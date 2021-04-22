@@ -50,6 +50,6 @@ def getUserID(Username, OAUTH):
         print("Error getting ID for: ", Username, "Caused by: ", e)
 
 
-AUTH = getOauth()
+#AUTH = getOauth()
 
-getUserID("demomute", AUTH)
+#getUserID("demomute", AUTH)
