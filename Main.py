@@ -2,8 +2,8 @@ import discord
 
 from discord.ext import commands, tasks
 from discord.utils import get
-import cogs.TwitchAPI as TwitchAPI
-import cogs.YoutubeAPI as YoutubeAPI
+from cogs import TwitchAPI as TwitchAPI
+from cogs import YoutubeAPI as YoutubeAPI
 import dotenv
 import os
 
