@@ -26,7 +26,6 @@ def checkUser(Username, OAUTH):##Checks to see if someone is live
     try:
         req = requests.get(URL, headers=HEADERS)
         jsondata = req.json()
-        print(jsondata)
         if len(jsondata['data']) == 1:
             return True
         else:
@@ -42,7 +41,6 @@ def getUserID(Username, OAUTH):##Gets the USERSID based on the Username they are
     try:
         req = requests.get(URL, headers=HEADERS)
         jsondata = req.json()
-        print(jsondata)
         if len(jsondata['data']) == 1:
             ID = jsondata['id']
             return ID
@@ -61,7 +59,6 @@ def getstream(Username, OAUTH):
     try:
         req = requests.get(URL, headers=HEADERS)
         jsondata = req.json()
-        print(jsondata)
         if len(jsondata['data']) == 1:
             response = 'Demomute' + ' is live: ' + jsondata['data'][0]['title'] + ' playing ' + jsondata['data'][0]['game_name'] + f'{TWITCHURL}'
             return response
