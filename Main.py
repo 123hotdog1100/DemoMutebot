@@ -5,10 +5,12 @@ import os
 import sys
 intents = discord.Intents.default()
 intents.members = True
-global store
+global store, done
+done = 0
 store = 0
 prefix = '$'  # Sets the prefix that the bot will use
 client = commands.Bot(command_prefix=prefix, intents=intents)
+
 
 if os.path.isfile(".env"):  ##Checks to see if there is a .env file and if there isn't it will create it
     print("Discovered .env File")
@@ -30,11 +32,14 @@ from cogs import TwitchAPI as TwitchAPI  # Imports custom twitchAPI libary
 from cogs import YoutubeAPI as YoutubeAPI  # Imports custom YoutubeAPI libary
 
 
+AUTH = TwitchAPI.getOauth()
+
 @client.event
 async def on_ready():  ##Waits for login and prints to the console that it has logged in and displays the user
     print('We have logged in as {0.user}'.format(client))
     await client.change_presence(
         activity=discord.Game("Message me for help"))  # Changes the bot's status to the string specified
+    Twitch.start()
     Youtube.start()  ##Starts the youtube loop
 
 
@@ -42,12 +47,20 @@ async def on_ready():  ##Waits for login and prints to the console that it has l
 async def shutdown(ctx):  # Turns the bot off
     print("Recieved shutdown command")
     await ctx.send("Shutting the bot down")
-    Youtube.stop
+    Youtube.stop()
+    Twitch.stop()
     await client.close()
 
 
-async def send(message):  ##Send function which some other functions use
-    channel = client.get_channel(834168559843147816)
+@client.command()
+async def notlive(ctx):
+    global done
+    print("Recieved not live")
+    await ctx.send("Recieved beging to check again")
+    done = 0
+
+async def send(message, channelid):  ##Send function which some other functions use
+    channel = client.get_channel(channelid)
     await channel.send(message)
 
 
@@ -67,7 +80,7 @@ async def Youtube():  ##Checks youtube for a new upload
         if num > store:
             test = "Demomute Just uploaded!! ", YoutubeAPI.conversion(username), " <@&834169017480642572>"
             str = ''.join(test)
-            await send(str)
+            await send(str, 834168559843147816)
             store = num
         elif num < store:
             store = num
@@ -78,18 +91,27 @@ async def Youtube():  ##Checks youtube for a new upload
 TW = dotenv.get_key(".env", "LIVENOT")
 print("Twitch video notifications set to:", TW)
 
-
 @tasks.loop(seconds=30)
 async def Twitch():
-    if TW == "True":
+    global done
+    if done == 1:
         pass
+
+    elif TW == "True":
+        print("Checking for twtich livestream")
+        done = 1
+
+        if TwitchAPI.checkUser('demomute', AUTH) == True:
+            name = TwitchAPI.getstream('demomute', AUTH)
+            print(name)
+            await send(name, 834094513944920124)
+
     else:
         pass
 
 
-# client.load_extension("cogs.loop")
 client.load_extension("cogs.welcome")
-# client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
+client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 
 try:
     client.run(dotenv.get_key(".env", "APIKEY"))  ##Starts the bot

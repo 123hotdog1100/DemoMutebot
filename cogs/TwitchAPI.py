@@ -28,7 +28,7 @@ def checkUser(userID, OAUTH):##Checks to see if someone is live
         jsondata = req.json()
         print(jsondata)
         if len(jsondata['data']) == 1:
-            print('hotdog1100' + ' is live: ' + jsondata['data'][0]['title'] + ' playing ' + jsondata['data'][0]['game_name'])
+            return True
         else:
             return False
     except Exception as e:
@@ -54,7 +54,25 @@ def getUserID(Username, OAUTH):##Gets the USERSID based on the Username they are
      #   print("Error getting ID for: ", Username, "Caused by: ", e)
 
 
-AUTH = getOauth()
+def getstream(Username, OAUTH):
+    TWITCHURL = "https://www.twitch.tv/demomute"
+    HEADERS = {'client-id': CLIENT_ID, 'Authorization': 'Bearer ' + OAUTH}
+    URL = BASE_URL + 'streams?user_login=' + Username
+    try:
+        req = requests.get(URL, headers=HEADERS)
+        jsondata = req.json()
+        print(jsondata)
+        if len(jsondata['data']) == 1:
+            response = 'Demomute' + ' is live: ' + jsondata['data'][0]['title'] + ' playing ' + jsondata['data'][0]['game_name'] + f'{TWITCHURL}'
+            return response
+        else:
+            return False
+    except Exception as e:
+        print("Getting stream details: ", e)
+        return False
+
+
+#AUTH = getOauth()
 
 #print(getUserID("hotdog1100", AUTH))
-print(checkUser(75334882, AUTH))
+#print(checkUser(75334882, AUTH))
