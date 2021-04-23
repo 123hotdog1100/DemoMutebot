@@ -75,7 +75,7 @@ async def Youtube():  ##Checks youtube for a new upload
 TW = dotenv.get_key(".env", "LIVENOT")
 print("Twitch video notifications set to:", TW)
 
-@tasks.loop(Seconds=30)
+@tasks.loop(seconds=30)
 async def Twitch():
     if TW == "True":
         pass
