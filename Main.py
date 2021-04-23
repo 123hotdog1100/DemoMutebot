@@ -85,7 +85,7 @@ async def Twitch():
 
 # client.load_extension("cogs.loop")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
-client.load_extension("cogs.welcome.py")
+client.load_extension("cogs.welcome")
 
 try:
     client.run(dotenv.get_key(".env", "APIKEY"))  ##Starts the bot
