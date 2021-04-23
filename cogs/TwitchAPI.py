@@ -20,9 +20,9 @@ def getOauth():##This function gets the oauth2 token which is required for inter
         print(e)
 
 
-def checkUser(userID, OAUTH):##Checks to see if someone is live
+def checkUser(Username, OAUTH):##Checks to see if someone is live
     HEADERS = {'client-id': CLIENT_ID, 'Authorization': 'Bearer ' + OAUTH}
-    URL = BASE_URL + 'streams?user_login=hotdog1100'
+    URL = BASE_URL + 'streams?user_login=' + Username
     try:
         req = requests.get(URL, headers=HEADERS)
         jsondata = req.json()
