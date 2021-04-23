@@ -100,9 +100,9 @@ async def Twitch():
     elif TW == "True":
         print("Checking for twtich livestream")
         done = 1
-
-        if TwitchAPI.checkUser('demomute', AUTH) == True:
-            name = TwitchAPI.getstream('demomute', AUTH)
+        username = 'demomute'
+        if TwitchAPI.checkUser(username, AUTH) == True:
+            name = TwitchAPI.getstream(username, AUTH) +' <@&834095415707041805>'
             print(name)
             await send(name, 834094513944920124)
 
