@@ -55,7 +55,7 @@ def getUserID(Username, OAUTH):##Gets the USERSID based on the Username they are
 
 
 def getstream(Username, OAUTH):
-    TWITCHURL = "https://www.twitch.tv/demomute"
+    TWITCHURL = " https://www.twitch.tv/demomute"
     HEADERS = {'client-id': CLIENT_ID, 'Authorization': 'Bearer ' + OAUTH}
     URL = BASE_URL + 'streams?user_login=' + Username
     try:
