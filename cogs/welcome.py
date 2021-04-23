@@ -3,7 +3,7 @@ from discord.ext.commands import Cog
 
 
 ##This file is to deal with all of the welcoming things
-class Welcome(commands.Cog):
+class Welcome(Cog):
     def __init__(self, client):
         self.client = client
 
