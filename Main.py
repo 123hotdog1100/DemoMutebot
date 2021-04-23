@@ -3,11 +3,12 @@ from discord.ext import commands, tasks
 import dotenv
 import os
 import sys
-
+intents = discord.Intents.default()
+intents.members = True
 global store
 store = 0
 prefix = '$'  # Sets the prefix that the bot will use
-client = commands.Bot(command_prefix=prefix)
+client = commands.Bot(command_prefix=prefix, intents=intents)
 
 if os.path.isfile(".env"):  ##Checks to see if there is a .env file and if there isn't it will create it
     print("Discovered .env File")
@@ -72,8 +73,11 @@ async def Youtube():  ##Checks youtube for a new upload
             store = num
         else:
             pass
+
+
 TW = dotenv.get_key(".env", "LIVENOT")
 print("Twitch video notifications set to:", TW)
+
 
 @tasks.loop(seconds=30)
 async def Twitch():
@@ -84,7 +88,8 @@ async def Twitch():
 
 
 # client.load_extension("cogs.loop")
-client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
+client.load_extension("cogs.welcome")
+# client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 
 try:
     client.run(dotenv.get_key(".env", "APIKEY"))  ##Starts the bot
