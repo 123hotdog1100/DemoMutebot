@@ -1,7 +1,5 @@
 import discord
 from discord.ext import commands, tasks
-from cogs import TwitchAPI as TwitchAPI  # Imports custom twitchAPI libary
-from cogs import YoutubeAPI as YoutubeAPI  # Imports custom YoutubeAPI libary
 import dotenv
 import os
 import sys
@@ -15,14 +13,21 @@ if os.path.isfile(".env"):  ##Checks to see if there is a .env file and if there
     print("Discovered .env File")
 else:
     print(".env file not found creating now")
-    # key = input("Please input your API key for the bot: ")
+    key = input("Please input your API key for the bot: ")
     with open(".env", "a") as f:  ##Adds all the relevent keys to the .env file it is creating
         f.write("APIKEY=")
         f.write(key + "\n")
         f.write("LIVENOT=\n")
+        f.write("YTVIDNOT=\n")
+        f.write("GOOGLEAPI=\n")
+        f.write("TWITCHAPI=\n")
+        f.write("TWITCHAPISECRET=\n")
         f.close()
         print("Please enter all your values in to the .env file and restart")
 
+
+from cogs import TwitchAPI as TwitchAPI  # Imports custom twitchAPI libary
+from cogs import YoutubeAPI as YoutubeAPI  # Imports custom YoutubeAPI libary
 
 @client.event
 async def on_ready(): ##Waits for login and prints to the console that it has logged in and displays the user
