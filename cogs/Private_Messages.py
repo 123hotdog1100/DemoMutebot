@@ -10,7 +10,7 @@ class Private(commands.Cog):
         try:
             if message.channel.id == message.author.dm_channel.id: #Checks to see if the message was sent in a private message
                 channel = self.client.get_channel(834920642096529408)#Sends message to a channel which the bot has access to
-                send = message.author.mention + " Needs help with: " + message.content # The message to send
+                send = message.author.mention + " Needs help with: " + message.content + "Please help them " + "<@&833822769048977409>"# The message to send
                 print(send) #Out puts message to console for logging reasons
                 await channel.send(send) #Sends the help request to the channel variable
             else:
