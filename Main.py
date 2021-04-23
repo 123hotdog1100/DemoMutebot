@@ -25,36 +25,37 @@ else:
         f.close()
         print("Please enter all your values in to the .env file and restart")
 
-
 from cogs import TwitchAPI as TwitchAPI  # Imports custom twitchAPI libary
 from cogs import YoutubeAPI as YoutubeAPI  # Imports custom YoutubeAPI libary
 
+
 @client.event
-async def on_ready(): ##Waits for login and prints to the console that it has logged in and displays the user
+async def on_ready():  ##Waits for login and prints to the console that it has logged in and displays the user
     print('We have logged in as {0.user}'.format(client))
-    await client.change_presence(activity=discord.Game("Message me for help")) #Changes the bot's status to the string specified
-    Youtube.start()##Starts the youtube loop
+    await client.change_presence(
+        activity=discord.Game("Message me for help"))  # Changes the bot's status to the string specified
+    Youtube.start()  ##Starts the youtube loop
 
 
 @client.command()
-async def shutdown(ctx):#Turns the bot off
+async def shutdown(ctx):  # Turns the bot off
     print("Recieved shutdown command")
     await ctx.send("Shutting the bot down")
     Youtube.stop
     await client.close()
 
 
-async def send(message):##Send function which some other functions use
+async def send(message):  ##Send function which some other functions use
     channel = client.get_channel(834168559843147816)
     await channel.send(message)
 
 
-YT = dotenv.get_key(".env", "YTVIDNOT")##Gets the YT Notification option
-print("Youtube video Notifications set to: " + YT)#Prints what the option was set to
+YT = dotenv.get_key(".env", "YTVIDNOT")  ##Gets the YT Notification option
+print("Youtube video Notifications set to: " + YT)  # Prints what the option was set to
 
 
 @tasks.loop(seconds=30)
-async def Youtube():##Checks youtube for a new upload
+async def Youtube():  ##Checks youtube for a new upload
     global store
     username = 'demomute'
     if YT == "True":
@@ -71,12 +72,21 @@ async def Youtube():##Checks youtube for a new upload
             store = num
         else:
             pass
+TW = dotenv.get_key(".env", "LIVENOT")
+print("Twitch video notifications set to:", TW)
+
+@tasks.loop(Seconds=30)
+async def Twitch():
+    if TW == "True":
+        pass
+    else:
+        pass
 
 
 # client.load_extension("cogs.loop")
-client.load_extension("cogs.Private_Messages")#Loads the Private_messages.py as a "cog"
+client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 
 try:
-    client.run(dotenv.get_key(".env", "APIKEY"))##Starts the bot
+    client.run(dotenv.get_key(".env", "APIKEY"))  ##Starts the bot
 except discord.errors.LoginFailure:
     print("Please add a token to the .env")
