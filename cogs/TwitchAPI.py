@@ -69,7 +69,7 @@ def getstream(Username, OAUTH):
         return False
 
 
-#AUTH = getOauth()
+AUTH = getOauth()
 
 #print(getUserID("hotdog1100", AUTH))
-#print(checkUser(75334882, AUTH))
+print(checkUser("demomute", AUTH))

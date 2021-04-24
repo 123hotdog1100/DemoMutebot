@@ -96,7 +96,9 @@ print("Twitch video notifications set to:", TW)
 async def Twitch():
     global done
     if done == 1:
-        pass
+        check = TwitchAPI.checkUser("demomute", AUTH)
+        if check == False:
+            done = 0
 
     elif TW == "True":
         print("Checking for twtich livestream")
