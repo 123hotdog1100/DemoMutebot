@@ -108,6 +108,10 @@ async def Twitch():
         pass
 
 
+@client.command()
+async def BadDog(ctx):
+    await ctx.send("<:FeelsSadFrogoman:834217399662149662>")
+
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 
