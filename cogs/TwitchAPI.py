@@ -72,4 +72,4 @@ def getstream(Username, OAUTH):
 AUTH = getOauth()
 
 #print(getUserID("hotdog1100", AUTH))
-print(checkUser("demomute", AUTH))
+#print(checkUser("demomute", AUTH))
