@@ -53,13 +53,6 @@ async def shutdown(ctx):  # Turns the bot off
     await client.close()
 
 
-@client.command()
-async def notlive(ctx):
-    global done
-    print("Recieved not live")
-    await ctx.send("Recieved beging to check again")
-    done = 0
-
 async def send(message, channelid):  ##Send function which some other functions use
     channel = client.get_channel(channelid)
     await channel.send(message)
