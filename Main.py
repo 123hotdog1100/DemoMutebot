@@ -9,7 +9,7 @@ global store, done
 done = 0
 store = 0
 prefix = '$'  # Sets the prefix that the bot will use
-client = commands.Bot(command_prefix=prefix, intents=intents)
+client = commands.Bot(command_prefix=prefix, intents=intents,case_insensitive=True)
 
 
 if os.path.isfile(".env"):  ##Checks to see if there is a .env file and if there isn't it will create it
@@ -41,7 +41,7 @@ async def on_ready():  ##Waits for login and prints to the console that it has l
         activity=discord.Game("Message me for help"))  # Changes the bot's status to the string specified
     Twitch.start()
     Youtube.start()  ##Starts the youtube loop
-    await send("I have started successfully", 834074188251791380)
+    await send("I have started successfully", 834074140284813333)
 
 
 @client.command()
@@ -108,9 +108,14 @@ async def Twitch():
         pass
 
 
-@client.command()
+@client.command(pass_context=True)
 async def BadDog(ctx):
-    await ctx.send("<:FeelsSadFrogoman:834217399662149662>")
+    mod = discord.utils.get(ctx.guild.roles, name="Mod")
+    admin = discord.utils.get(ctx.guild.roles, name=":)")
+    if mod or admin in ctx.author.roles:
+        await ctx.send("<:FeelsSadFrogoman:834217399662149662>")
+    else:
+        await ctx.send("You're not my owner!")
 
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
