@@ -46,8 +46,8 @@ async def on_ready():  ##Waits for login and prints to the console that it has l
 
 @client.command()
 async def shutdown(ctx):  # Turns the bot off
-    botmin = discord.utils.get(ctx.guild.roles, name="Bot Admin")
-    if botmin in ctx.author.roles:
+    botmin = discord.utils.get(ctx.guild.roles, name="Bot Admin")##Gets the role "Bot Admin" from the server
+    if botmin in ctx.author.roles:#Checks if the user that sent the command has the correct role
         print("Recieved shutdown command")
         await ctx.send("Shutting the bot down")
         Youtube.stop()
@@ -115,9 +115,9 @@ async def Twitch():
 
 @client.command(pass_context=True)
 async def BadDog(ctx):
-    mod = discord.utils.get(ctx.guild.roles, name="Mod")
-    admin = discord.utils.get(ctx.guild.roles, name=":)")
-    if mod or admin in ctx.author.roles:
+    mod = discord.utils.get(ctx.guild.roles, name="Mod")#Gets the role "Mod" from the server
+    admin = discord.utils.get(ctx.guild.roles, name=":)")#Gets the role ":)" from the server
+    if mod or admin in ctx.author.roles:#Checks if the user that sent the command has the correct role
         await ctx.send("<:FeelsSadFrogoman:834217399662149662>")
     else:
         await ctx.send("You're not my owner!")
@@ -125,9 +125,9 @@ async def BadDog(ctx):
 
 @client.command(pass_context=True)
 async def Goodboi(ctx):
-    mod = discord.utils.get(ctx.guild.roles, name="Mod")
-    admin = discord.utils.get(ctx.guild.roles, name=":)")
-    if mod or admin in ctx.author.roles:
+    mod = discord.utils.get(ctx.guild.roles, name="Mod")#Gets the role "Mod" from the server
+    admin = discord.utils.get(ctx.guild.roles, name=":)")#Gets the role ":)" from the server
+    if mod or admin in ctx.author.roles:#Checks if the user that sent the command has the correct role
         await ctx.send("<:FeelsHappyFrogoman:834217354560274482>")
     else:
         await ctx.send("I am a good boi but you're clearly not ")
