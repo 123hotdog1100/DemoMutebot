@@ -41,6 +41,7 @@ async def on_ready():  ##Waits for login and prints to the console that it has l
         activity=discord.Game("Message me for help"))  # Changes the bot's status to the string specified
     Twitch.start()
     Youtube.start()  ##Starts the youtube loop
+    await send("I have started successfully", 834074188251791380)
 
 
 @client.command()
@@ -91,7 +92,7 @@ async def Youtube():  ##Checks youtube for a new upload
 TW = dotenv.get_key(".env", "LIVENOT")
 print("Twitch video notifications set to:", TW)
 
-@tasks.loop(seconds=30)
+@tasks.loop(seconds=60)
 async def Twitch():
     global done
     if done == 1:

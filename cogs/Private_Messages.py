@@ -27,20 +27,6 @@ class Private(commands.Cog):
             pass
 
 
-    @commands.Cog.listener()
-    async def on_message(self, message):
-        channel = self.client.get_channel(834920642096529408)
-        if message.channel.id == 834920642096529408:
-            history = await channel.history(limit=2).flatten()
-            for msg in history:
-                if 'help' in msg.content:
-                    content = msg.content
-                    mention = content[:content.find(">") + len(">")]
-                    print("WORKING")
-
-
-
-
 
 def setup(client):
     client.add_cog(Private(client))
