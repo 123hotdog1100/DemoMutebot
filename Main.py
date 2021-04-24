@@ -90,8 +90,10 @@ async def Twitch():
     global done
     if done == 1:
         check = TwitchAPI.checkUser("demomute", AUTH)
+        print("Is there still a live stream? ", check)
         if check == False:
             done = 0
+            print("Recieved no live stream starting to check for one again")
 
     elif TW == "True":
         print("Checking for twtich livestream")
