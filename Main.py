@@ -46,11 +46,16 @@ async def on_ready():  ##Waits for login and prints to the console that it has l
 
 @client.command()
 async def shutdown(ctx):  # Turns the bot off
-    print("Recieved shutdown command")
-    await ctx.send("Shutting the bot down")
-    Youtube.stop()
-    Twitch.stop()
-    await client.close()
+    botmin = discord.utils.get(ctx.guild.roles, name="Bot Admin")
+    if botmin in ctx.author.roles:
+        print("Recieved shutdown command")
+        await ctx.send("Shutting the bot down")
+        Youtube.stop()
+        Twitch.stop()
+        await client.close()
+    else:
+        await ctx.send("You're not a Bot Admin!")
+        print("Someone tried to shut me down", ctx.author.mention)
 
 
 async def send(message, channelid):  ##Send function which some other functions use
@@ -117,6 +122,15 @@ async def BadDog(ctx):
     else:
         await ctx.send("You're not my owner!")
 
+
+@client.command(pass_context=True)
+async def Goodboi(ctx):
+    mod = discord.utils.get(ctx.guild.roles, name="Mod")
+    admin = discord.utils.get(ctx.guild.roles, name=":)")
+    if mod or admin in ctx.author.roles:
+        await ctx.send("<:FeelsHappyFrogoman:834217354560274482>")
+    else:
+        await ctx.send("I am a good boi but you're clearly not ")
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 
