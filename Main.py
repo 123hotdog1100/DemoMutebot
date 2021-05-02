@@ -2,15 +2,17 @@ import discord
 from discord.ext import commands, tasks
 import dotenv
 import os
+
+import mysql.connector as db
 import sys
+
 intents = discord.Intents.default()
 intents.members = True
 global store, done
 done = 0
 store = 0
 prefix = '$'  # Sets the prefix that the bot will use
-client = commands.Bot(command_prefix=prefix, intents=intents,case_insensitive=True)
-
+client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True)
 
 if os.path.isfile(".env"):  ##Checks to see if there is a .env file and if there isn't it will create it
     print("Discovered .env File")
@@ -31,8 +33,8 @@ else:
 from cogs import TwitchAPI as TwitchAPI  # Imports custom twitchAPI libary
 from cogs import YoutubeAPI as YoutubeAPI  # Imports custom YoutubeAPI libary
 
-
 AUTH = TwitchAPI.getOauth()
+
 
 @client.event
 async def on_ready():  ##Waits for login and prints to the console that it has logged in and displays the user
@@ -46,8 +48,8 @@ async def on_ready():  ##Waits for login and prints to the console that it has l
 
 @client.command()
 async def shutdown(ctx):  # Turns the bot off
-    botmin = discord.utils.get(ctx.guild.roles, name="Bot Admin")##Gets the role "Bot Admin" from the server
-    if botmin in ctx.author.roles:#Checks if the user that sent the command has the correct role
+    botmin = discord.utils.get(ctx.guild.roles, name="Bot Admin")  ##Gets the role "Bot Admin" from the server
+    if botmin in ctx.author.roles:  # Checks if the user that sent the command has the correct role
         print("Recieved shutdown command")
         await ctx.send("Shutting the bot down")
         Youtube.stop()
@@ -90,14 +92,18 @@ async def Youtube():  ##Checks youtube for a new upload
 TW = dotenv.get_key(".env", "LIVENOT")
 print("Twitch video notifications set to:", TW)
 
-@tasks.loop(seconds=60)
+
+@tasks.loop(seconds=15)
 async def Twitch():
     global done
+    print(done)
     if done == 1:
         check = TwitchAPI.checkUser("demomute", AUTH)
         print("Is there still a live stream? ", check)
         if check == False:
             done = 0
+            chan = client.get_channel(834094513944920124)
+            await chan.edit(name="Live-Notifications")
             print("Recieved no live stream starting to check for one again")
 
     elif TW == "True":
@@ -105,19 +111,20 @@ async def Twitch():
         username = 'demomute'
         if TwitchAPI.checkUser(username, AUTH) == True:
             done = 1
-            name = TwitchAPI.getstream(username, AUTH) +' <@&834095415707041805>'
+            name = TwitchAPI.getstream(username, AUTH) + ' <@&834095415707041805>'
             print(name)
+            chan = client.get_channel(834094513944920124)
             await send(name, 834094513944920124)
-
+            await chan.edit(name="Now-Live")
     else:
         pass
 
 
 @client.command(pass_context=True)
 async def BadDog(ctx):
-    mod = discord.utils.get(ctx.guild.roles, name="Mod")#Gets the role "Mod" from the server
-    admin = discord.utils.get(ctx.guild.roles, name=":)")#Gets the role ":)" from the server
-    if mod or admin in ctx.author.roles:#Checks if the user that sent the command has the correct role
+    mod = discord.utils.get(ctx.guild.roles, name="Mod")  # Gets the role "Mod" from the server
+    admin = discord.utils.get(ctx.guild.roles, name=":)")  # Gets the role ":)" from the server
+    if mod or admin in ctx.author.roles:  # Checks if the user that sent the command has the correct role
         await ctx.send("<:FeelsSadFrogoman:834217399662149662>")
     else:
         await ctx.send("You're not my owner!")
@@ -125,12 +132,14 @@ async def BadDog(ctx):
 
 @client.command(pass_context=True)
 async def Goodboi(ctx):
-    mod = discord.utils.get(ctx.guild.roles, name="Mod")#Gets the role "Mod" from the server
-    admin = discord.utils.get(ctx.guild.roles, name=":)")#Gets the role ":)" from the server
-    if mod or admin in ctx.author.roles:#Checks if the user that sent the command has the correct role
+    mod = discord.utils.get(ctx.guild.roles, name="Mod")  # Gets the role "Mod" from the server
+    admin = discord.utils.get(ctx.guild.roles, name=":)")  # Gets the role ":)" from the server
+    if mod or admin in ctx.author.roles:  # Checks if the user that sent the command has the correct role
         await ctx.send("<:FeelsHappyFrogoman:834217354560274482>")
     else:
         await ctx.send("I am a good boi but you're clearly not ")
+
+
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 
