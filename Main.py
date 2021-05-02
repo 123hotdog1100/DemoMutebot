@@ -3,8 +3,6 @@ from discord.ext import commands, tasks
 import dotenv
 import os
 
-import mysql.connector as db
-import sys
 
 intents = discord.Intents.default()
 intents.members = True
@@ -100,10 +98,10 @@ async def Twitch():
     if done == 1:
         check = TwitchAPI.checkUser("demomute", AUTH)
         print("Is there still a live stream? ", check)
-        if check == False:
+        if not check:
             done = 0
             chan = client.get_channel(834094513944920124)
-            await chan.edit(name="Live-Notifications")
+            await chan.edit(name="Stream-Offline")
             print("Recieved no live stream starting to check for one again")
 
     elif TW == "True":
@@ -115,7 +113,7 @@ async def Twitch():
             print(name)
             chan = client.get_channel(834094513944920124)
             await send(name, 834094513944920124)
-            await chan.edit(name="Now-Live")
+            await chan.edit(name="Now-Live!")
     else:
         pass
 
