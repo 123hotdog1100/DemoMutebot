@@ -9,8 +9,7 @@ intents.members = True
 global store, done
 done = 0
 store = 0
-prefix = '$'  # Sets the prefix that the bot will use
-client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True)
+
 
 if os.path.isfile(".env"):  ##Checks to see if there is a .env file and if there isn't it will create it
     print("Discovered .env File")
@@ -25,8 +24,13 @@ else:
         f.write("GOOGLEAPI=\n")
         f.write("TWITCHAPI=\n")
         f.write("TWITCHAPISECRET=\n")
+        f.write("PREFIX=%\n")
         f.close()
         print("Please enter all your values in to the .env file and restart")
+
+prefix = dotenv.get_key(".env", "PREFIX")  # Sets the prefix that the bot will use
+print("Prefix set to", prefix)
+client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True)
 
 from cogs import TwitchAPI as TwitchAPI  # Imports custom twitchAPI libary
 from cogs import YoutubeAPI as YoutubeAPI  # Imports custom YoutubeAPI libary
@@ -37,14 +41,13 @@ AUTH = TwitchAPI.getOauth()
 @client.event
 async def on_ready():  ##Waits for login and prints to the console that it has logged in and displays the user
     print('We have logged in as {0.user}'.format(client))
-    await client.change_presence(
-        activity=discord.Game("Message me for help"))  # Changes the bot's status to the string specified
+    await client.change_presence(activity=discord.Game("Message me for help"))  # Changes the bot's status to the string specified
     Twitch.start()
     Youtube.start()  ##Starts the youtube loop
     await send("I have started successfully", 834074140284813333)
 
 
-@client.command()
+@client.command(alias="Shutdown", brief="Turns the bot off", description="Turns the bot off but requires bot admin role")
 async def shutdown(ctx):  # Turns the bot off
     botmin = discord.utils.get(ctx.guild.roles, name="Bot Admin")  ##Gets the role "Bot Admin" from the server
     if botmin in ctx.author.roles:  # Checks if the user that sent the command has the correct role
@@ -94,7 +97,6 @@ print("Twitch video notifications set to:", TW)
 @tasks.loop(seconds=15)
 async def Twitch():
     global done
-    print(done)
     if done == 1:
         check = TwitchAPI.checkUser("demomute", AUTH)
         print("Is there still a live stream? ", check)
@@ -114,13 +116,15 @@ async def Twitch():
             chan = client.get_channel(834094513944920124)
             await send(name, 834094513944920124)
             await chan.edit(name="Now-Live!")
+        else:
+            print("No Stream detected")
     else:
         pass
 
 
-@client.command(pass_context=True)
-async def BadDog(ctx):
-    mod = discord.utils.get(ctx.guild.roles, name="Mod")  # Gets the role "Mod" from the server
+@client.command(pass_context=True,alias="badboi",brief="Tells me I'm a bad boy")
+async def Badboi(ctx):
+    mod = discord.utils.get(ctx.guild.roles, name="Mods")  # Gets the role "Mod" from the server
     admin = discord.utils.get(ctx.guild.roles, name=":)")  # Gets the role ":)" from the server
     if mod or admin in ctx.author.roles:  # Checks if the user that sent the command has the correct role
         await ctx.send("<:FeelsSadFrogoman:834217399662149662>")
@@ -128,7 +132,7 @@ async def BadDog(ctx):
         await ctx.send("You're not my owner!")
 
 
-@client.command(pass_context=True)
+@client.command(pass_context=True,alias="goodboi",brief="Tells me I'm a good boy")
 async def Goodboi(ctx):
     mod = discord.utils.get(ctx.guild.roles, name="Mod")  # Gets the role "Mod" from the server
     admin = discord.utils.get(ctx.guild.roles, name=":)")  # Gets the role ":)" from the server
@@ -141,6 +145,7 @@ async def Goodboi(ctx):
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 
+print("Starting Bot now!")
 try:
     client.run(dotenv.get_key(".env", "APIKEY"))  ##Starts the bot
 except discord.errors.LoginFailure:
