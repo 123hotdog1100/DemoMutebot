@@ -25,12 +25,15 @@ else:
         f.write("TWITCHAPI=\n")
         f.write("TWITCHAPISECRET=\n")
         f.write("PREFIX=%\n")
+        f.write("DEBUG=False\n")
         f.close()
         print("Please enter all your values in to the .env file and restart")
 
 prefix = dotenv.get_key(".env", "PREFIX")  # Sets the prefix that the bot will use
 print("Prefix set to", prefix)
 client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True)
+
+debug = dotenv.get_key(".env", "DEBUG")
 
 from cogs import TwitchAPI as TwitchAPI  # Imports custom twitchAPI libary
 from cogs import YoutubeAPI as YoutubeAPI  # Imports custom YoutubeAPI libary
@@ -44,6 +47,7 @@ async def on_ready():  ##Waits for login and prints to the console that it has l
     await client.change_presence(activity=discord.Game("Message me for help"))  # Changes the bot's status to the string specified
     Twitch.start()
     Youtube.start()  ##Starts the youtube loop
+    await send("I am in debug mode i will not check for twitch streams", 834074140284813333)
     await send("I have started successfully", 834074140284813333)
 
 
@@ -66,7 +70,11 @@ async def send(message, channelid):  ##Send function which some other functions 
     await channel.send(message)
 
 
-YT = dotenv.get_key(".env", "YTVIDNOT")  ##Gets the YT Notification option
+if debug == "False":
+    YT = "False"
+else:
+    YT = dotenv.get_key(".env", "YTVIDNOT")  ##Gets the YT Notification option
+
 print("Youtube video Notifications set to: " + YT)  # Prints what the option was set to
 
 
@@ -90,7 +98,10 @@ async def Youtube():  ##Checks youtube for a new upload
             pass
 
 
-TW = dotenv.get_key(".env", "LIVENOT")
+if debug == "True":
+    TW = "False"
+else:
+    TW = dotenv.get_key(".env", "LIVENOT")
 print("Twitch video notifications set to:", TW)
 
 
@@ -99,7 +110,7 @@ async def Twitch():
     global done
     if done == 1:
         check = TwitchAPI.checkUser("demomute", AUTH)
-        print("Is there still a live stream? ", check)
+        print("Is there still a live stream?", check)
         if not check:
             done = 0
             chan = client.get_channel(834094513944920124)
@@ -144,7 +155,7 @@ async def Goodboi(ctx):
 
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
-
+print("Debug? ", debug)
 print("Starting Bot now!")
 try:
     client.run(dotenv.get_key(".env", "APIKEY"))  ##Starts the bot

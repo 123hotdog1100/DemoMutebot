@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import discord
 from discord import PermissionOverwrite
 from discord.ext import commands
@@ -39,6 +41,12 @@ class Private(commands.Cog):
             else:
                 return
         except Exception as e:  # Catches exceptions so the bot doesn't crash out
+            with open("Private_Messages.py Error.txt", "a") as f:
+                e = str(e)
+                if e == "'ClientUser' object has no attribute 'dm_channel'":
+                    pass
+                else:
+                    f.write(str(datetime.now()) + "   " + e + "\n")
             pass
 
 
