@@ -122,7 +122,7 @@ async def Twitch():
         pass
 
 
-@client.command(pass_context=True,alias="badboi",brief="Tells me I'm a bad boy")
+@client.command(pass_context=True,alias="badboi")#,brief="Tells me I'm a bad boy")
 async def Badboi(ctx):
     mod = discord.utils.get(ctx.guild.roles, name="Mods")  # Gets the role "Mod" from the server
     admin = discord.utils.get(ctx.guild.roles, name=":)")  # Gets the role ":)" from the server
