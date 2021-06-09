@@ -34,10 +34,13 @@ class Private(commands.Cog):
 
                 senddm = "I have created a help channel for you mods will talk to you in there"
                 await dms.send(senddm)
-                send = message.author.mention + " Needs help with: " + message.content + ": Please help them " + \
-                       "<@&833822769048977409>"  # The message to send
+                send = message.author.mention + " Needs help with: " + message.content
                 print(send)  # Out puts message to console for logging reasons
-                await channel.send(send)  # Sends the help request to the channel variable
+
+                embedvar = discord.Embed(title="Help Request")
+                embedvar.add_field(name="Help request", value=send)
+                await channel.send("<@&833822769048977409>")
+                await channel.send(embed=embedvar)
             else:
                 return
         except Exception as e:  # Catches exceptions so the bot doesn't crash out
