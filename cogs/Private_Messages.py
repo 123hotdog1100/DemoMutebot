@@ -18,9 +18,10 @@ class Private(commands.Cog):
                 # access to
                 dms = self.client.get_channel(dm)
                 username = message.author.display_name
-                name = f'Help for {username}'
-                await guild.create_text_channel(name, category=851963274694230066)
-                serverchan = discord.utils.get(guild.channels, name=name)
+                channame = f'Help for {username}'
+                category = discord.utils.get(guild.categories, name="Help")
+                await guild.create_text_channel(channame, category=category)
+                serverchan = discord.utils.get(guild.text_channels, name=channame)
                 print(serverchan)
                 senddm = "We will look in to this for you"
                 await dms.send(senddm)
