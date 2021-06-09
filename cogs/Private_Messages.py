@@ -18,8 +18,6 @@ class Private(commands.Cog):
             if message.channel.id == message.author.dm_channel.id:  # Checks to see if the message was sent in a
                 # private message
                 dm = message.channel.id
-                channel = self.client.get_channel(834920642096529408)  # Sends message to a channel which the bot has
-                # access to
                 dms = self.client.get_channel(dm)
                 username = message.author.display_name
                 channame = f'Help for {username}'
