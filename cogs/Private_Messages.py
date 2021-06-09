@@ -38,7 +38,7 @@ class Private(commands.Cog):
                 print(send)  # Out puts message to console for logging reasons
 
                 embedvar = discord.Embed(title="Help Request")
-                embedvar.add_field(name="Help request", value=send)
+                embedvar.add_field(name="Issue", value=send)
                 await channel.send("<@&833822769048977409>")
                 await channel.send(embed=embedvar)
             else:
