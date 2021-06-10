@@ -5,8 +5,8 @@ from discord import PermissionOverwrite
 from discord.ext import commands
 
 
-#This file is to deal with all of the private message issues
-class Private(commands.Cog):
+# This file is to deal with all of the private message issues
+class Help_Requests(commands.Cog):
     def __init__(self, client):
         self.client = client
 
@@ -52,7 +52,16 @@ class Private(commands.Cog):
                     f.write(str(datetime.now()) + "   " + e + "\n")
             pass
 
+    @commands.command(brief="Closes a help channel")
+    async def close(self, ctx):
+        channamecheck = f"help-for-"
+        if channamecheck in ctx.channel.name:
+            await ctx.channel.delete()
+        else:
+            await ctx.send("I can only close Help channels")
+            pass
+
 
 
 def setup(client):
-    client.add_cog(Private(client))
+    client.add_cog(Help_Requests(client))
