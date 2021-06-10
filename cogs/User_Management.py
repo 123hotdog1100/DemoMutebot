@@ -102,8 +102,22 @@ class User_Management(commands.Cog):
         await channel.send(f"You are no longer temp muted on {server}")
 
 
-    @Cog.listener()
-    async def on_command_error(self, ctx, error):
+    @Ban.error
+    async def Ban_error(self, ctx, error):
+        print(error)
+        if isinstance(error, discord.ext.commands.errors.MissingPermissions):
+            response = await ctx.send("You do not have the required permissions for this command")
+            await asyncio.sleep(2)
+            await response.delete()
+            print(f"{ctx.author} Tried to use a elevated command in User_Management.py")
+            await self.client.get_channel(834074140284813333).send(
+                f"{ctx.author} Tried to use a elevated command in User Management Cog")
+        if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+            response = await ctx.send("This command requires a member and time arguments")
+            await asyncio.sleep(4)
+            await response.delete()
+    @Kick.error
+    async def Kick_error(self, ctx, error):
         print(error)
         if isinstance(error, discord.ext.commands.errors.MissingPermissions):
             response = await ctx.send("You do not have the required permissions for this command")
@@ -117,6 +131,36 @@ class User_Management(commands.Cog):
             await asyncio.sleep(4)
             await response.delete()
 
+    @Tempban.error
+    async def Tempban_error(self, ctx, error):
+        print(error)
+        if isinstance(error, discord.ext.commands.errors.MissingPermissions):
+            response = await ctx.send("You do not have the required permissions for this command")
+            await asyncio.sleep(2)
+            await response.delete()
+            print(f"{ctx.author} Tried to use a elevated command in User_Management.py")
+            await self.client.get_channel(834074140284813333).send(
+                f"{ctx.author} Tried to use a elevated command in User Management Cog")
+        if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+            response = await ctx.send("This command requires a member and time arguments")
+            await asyncio.sleep(4)
+            await response.delete()
+
+
+    @Tempmute.error
+    async def Tempmute_error(self, ctx, error):
+        print(error)
+        if isinstance(error, discord.ext.commands.errors.MissingPermissions):
+            response = await ctx.send("You do not have the required permissions for this command")
+            await asyncio.sleep(2)
+            await response.delete()
+            print(f"{ctx.author} Tried to use a elevated command in User_Management.py")
+            await self.client.get_channel(834074140284813333).send(
+                f"{ctx.author} Tried to use a elevated command in User Management Cog")
+        if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+            response = await ctx.send("This command requires a member and time arguments")
+            await asyncio.sleep(4)
+            await response.delete()
 
 
 def setup(client):

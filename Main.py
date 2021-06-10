@@ -1,3 +1,5 @@
+import asyncio
+
 import discord
 from discord.ext import commands, tasks
 import dotenv
@@ -153,6 +155,32 @@ async def Goodboi(ctx):
         await ctx.send("<:FeelsHappyFrogoman:834217354560274482>")
     else:
         await ctx.send("I am a good boi but you're clearly not ")
+
+
+@client.command(pass_context=True,alias="c", brief="Delete amount of messages stated")
+@commands.has_permissions(manage_channels=True)
+async def clear(ctx, amount: int):
+    if amount > 100:
+        error = await ctx.send(f"{amount} is more messages then discord can handle me removing sorry.")
+        help = await ctx.send("please specify an amount below 100")
+        await asyncio.sleep(5)
+        await help.delete()
+        await error.delete()
+    await ctx.channel.purge(limit=amount)
+    response = await ctx.send(f"I have cleared {amount} messages")
+    await asyncio.sleep(3)
+    await response.delete()
+
+@clear.error
+async def clear_error(ctx, error):
+    if isinstance(error, commands.MissingRequiredArgument):
+        response = await ctx.send("Please specify an amount")
+        await asyncio.sleep(2)
+        await ctx.message.delete()
+        await response.delete()
+    else:
+        print(error)
+
 
 
 client.load_extension("cogs.welcome")
