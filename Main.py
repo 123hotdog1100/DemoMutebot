@@ -34,6 +34,8 @@ else:
 prefix = dotenv.get_key(".env", "PREFIX")  # Sets the prefix that the bot will use
 print("Prefix set to", prefix)
 client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True)
+client.remove_command('help')
+
 
 debug = dotenv.get_key(".env", "DEBUG")
 
@@ -138,6 +140,7 @@ async def Twitch():
 
 
 @client.command(pass_context=True,alias="badboi")#,brief="Tells me I'm a bad boy")
+@commands.cooldown(1,30, commands.BucketType.user)
 async def Badboi(ctx):
     mod = discord.utils.get(ctx.guild.roles, name="Mods")  # Gets the role "Mod" from the server
     admin = discord.utils.get(ctx.guild.roles, name=":)")  # Gets the role ":)" from the server
@@ -148,10 +151,12 @@ async def Badboi(ctx):
 
 
 @client.command(pass_context=True,alias="goodboi",brief="Tells me I'm a good boy")
+@commands.cooldown(1,30, commands.BucketType.user)
 async def Goodboi(ctx):
-    mod = discord.utils.get(ctx.guild.roles, name="Mod")  # Gets the role "Mod" from the server
+    mod = discord.utils.get(ctx.guild.roles, name="Mods")  # Gets the role "Mod" from the server
     admin = discord.utils.get(ctx.guild.roles, name=":)")  # Gets the role ":)" from the server
-    if mod or admin in ctx.author.roles:  # Checks if the user that sent the command has the correct role
+    vip = discord.utils.get(ctx.guild.roles, name="VIP")
+    if mod in ctx.author.roles or admin in ctx.author.roles or vip in ctx.author.roles:  # Checks if the user that sent the command has the correct role
         await ctx.send("<:FeelsHappyFrogoman:834217354560274482>")
     else:
         await ctx.send("I am a good boi but you're clearly not ")
@@ -182,6 +187,32 @@ async def clear_error(ctx, error):
         print(error)
 
 
+
+@client.command(pass_context=True)
+@commands.cooldown(1,30, commands.BucketType.user)
+async def help(ctx):
+    author = ctx.message.author
+
+    embed = discord.Embed(
+        colour=discord.Colour.light_grey()
+    )
+    await ctx.message.delete()
+    embed.set_author(name='Help')
+    embed.add_field(name=f"{prefix}help", value="Shows this", inline=False)
+    mod = discord.utils.get(ctx.guild.roles, name="Mods")
+    admin = discord.utils.get(ctx.message.guild.roles, name=":)")
+    vip = discord.utils.get(ctx.guild.roles, name="VIP")
+    if mod in ctx.author.roles or admin in ctx.author.roles:
+        embed.add_field(name=f"{mod}'s Role permissions", value=f"You get the following commands from the {mod} role")
+        embed.add_field(name=f"{prefix}close", value="Closes the support channel it is used in", inline=False)
+        embed.add_field(name=f"{prefix}Tempban", value="Tempbans the user for the time set", inline=False)
+        embed.add_field(name=f"{prefix}Ban", value="Permanently bans the user", inline=False)
+        embed.add_field(name=f"{prefix}kick", value="Kicks the user", inline=False)
+        embed.add_field(name=f"{prefix}Tempmute", value="Tempmutes the user for the time set", inline=False)
+    if vip in ctx.author.roles:
+        embed.add_field(name=f"{vip}'s Role permissions", value=f"You get the following commands from the {mod} role", inline=True)
+        embed.add_field(name=f"{prefix}Goodboi", value="Tells me i'm a good boi", inline=False)
+    await author.send(author, embed=embed)
 
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.User_Management")
