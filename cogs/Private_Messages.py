@@ -70,7 +70,7 @@ class Help_Requests(commands.Cog):
 
     @commands.command(brief="Closes a help channel")
     async def close(self, ctx):
-        channamecheck = f"help-for-"
+        channamecheck = "help-for-"
         if channamecheck in ctx.channel.name:
             await ctx.channel.delete()
             print(f"Closing {ctx.channel.name}")
