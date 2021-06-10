@@ -155,7 +155,7 @@ async def Goodboi(ctx):
         await ctx.send("I am a good boi but you're clearly not ")
 
 
-#client.load_extension("cogs.welcome")
+client.load_extension("cogs.welcome")
 client.load_extension("cogs.User_Management")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 print("Debug? ", debug)
