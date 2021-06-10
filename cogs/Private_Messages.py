@@ -57,6 +57,7 @@ class Help_Requests(commands.Cog):
         channamecheck = f"help-for-"
         if channamecheck in ctx.channel.name:
             await ctx.channel.delete()
+            print(f"Closing {ctx.channel.name}")
         else:
             await ctx.send("I can only close Help channels")
             pass
