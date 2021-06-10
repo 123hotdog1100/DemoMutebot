@@ -47,8 +47,10 @@ async def on_ready():  ##Waits for login and prints to the console that it has l
     await client.change_presence(activity=discord.Game("Message me for help"))  # Changes the bot's status to the string specified
     Twitch.start()
     Youtube.start()  ##Starts the youtube loop
-    await send("I am in debug mode i will not check for twitch streams", 834074140284813333)
-    await send("I have started successfully", 834074140284813333)
+    if debug == "False":
+        await send("I am in debug mode i will not check for twitch streams", 834074140284813333)
+    else:
+        await send("I have started successfully", 834074140284813333)
 
 
 @client.command(alias="Shutdown", brief="Turns the bot off", description="Turns the bot off but requires bot admin role")
