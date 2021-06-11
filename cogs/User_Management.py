@@ -179,13 +179,12 @@ class User_Management(commands.Cog):
         await asyncio.sleep(2)
         await response.delete()
         if S.read_using_id(id) >= 3:
-            tmute = await self.client.get_command("Tempmute")
-            await ctx.invoke(tmute(member, "1h", "Too many warnings"))
+            tmute = self.client.get_command("Tempmute")
+            await ctx.invoke(tmute, member, "1h", reason="Too many warnings")
             response2 = await ctx.send(f"{member.mention} Had more than three warnings they have been muted for 1h")
             S.clear(ID)
             await asyncio.sleep(2)
             await response2.delete
-
 
 
 
