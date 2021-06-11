@@ -1,5 +1,5 @@
 import asyncio
-
+import cogs.SQLite as S
 import discord
 
 from discord.ext import commands
@@ -161,6 +161,34 @@ class User_Management(commands.Cog):
             response = await ctx.send("This command requires a member and time arguments")
             await asyncio.sleep(4)
             await response.delete()
+
+    @commands.command()
+    @commands.has_role(833822769048977409)
+    async def Warn(self, ctx, member: discord.Member):
+        id = member.mention
+        id = id.strip("<")
+        id = id.strip("@")
+        id = id.strip(">")
+        current = S.read_using_id(id)
+        username = member.display_name
+        if current is None:
+            S.data_entry(id, username, 1)
+        elif current is not None:
+            S.update(id)
+        response = await ctx.send(f"I have warned {member.display_name} they are now on {S.read_using_id(id)} warnings")
+        await asyncio.sleep(2)
+        await response.delete()
+        if S.read_using_id(id) >= 3:
+            tmute = await self.client.get_command("Tempmute")
+            await ctx.invoke(tmute(member, "1h", "Too many warnings"))
+            response2 = await ctx.send(f"{member.mention} Had more than three warnings they have been muted for 1h")
+            S.clear(ID)
+            await asyncio.sleep(2)
+            await response2.delete
+
+
+
+
 
 
 def setup(client):
