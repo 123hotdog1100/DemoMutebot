@@ -11,9 +11,13 @@ if not os.path.isfile("WarnsDB.db"):
     print("Created Warning database")
 
 
-def create_table():
+def create_warns_table():
     SQL.execute('create table if not exists Warns("ID" integer not null primary key unique,"Username" text not null,  '
                 '"Amount" integer, "History" INTEGER)')
+
+def create_reasons_table():
+    SQL.execute('create table if not exists Reasons("ID" integer not null  ,"Username" text not null,  '
+                '"Reason" text not null )')
     db.commit()
 
 
@@ -67,6 +71,13 @@ def clear(ID):
     SQL.execute(f"UPDATE Warns SET Amount = 0 WHERE ID = {ID}")
     db.commit()
 
+def clear_history(ID):
+    SQL.execute(f"UPDATE Warns SET History = 0 WHERE ID = {ID}")
+    db.commit()
+
+def data_entry_reasons(ID: int, Username: str, Reason: str):
+    SQL.execute("insert into Reasons(ID, Username, Reason) values(?,?,?)", (ID, Username, Reason))
+    db.commit()
 
 def close():
     SQL.close()
@@ -75,4 +86,26 @@ def close():
 
 SQL.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='Warns'")
 if len(SQL.fetchall()) == 0:
-    create_table()
+    create_warns_table()
+
+SQL.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='Reasons'")
+if len(SQL.fetchall()) == 0:
+    create_reasons_table()
+    print("Created Reasons table")
+id = 11
+
+
+def reasons_read_amount(ID):
+    SQL.execute(f"SELECT * FROM Reasons WHERE ID={ID}")
+    return len(SQL.fetchall())
+
+def reasons_read_using_id(ID: int):
+    SQL.execute("SELECT * FROM Reasons WHERE ID=?", (ID,))
+    for row in SQL.fetchall():
+        print(row[2])
+        yield row[2]
+
+def delete(ID):
+    SQL.execute("DELETE FROM Reasons WHERE ID=?", (ID,))
+    db.commit()
+    SQL.execute("SELECT * FROM Reasons WHERE ID=?", (ID,))
