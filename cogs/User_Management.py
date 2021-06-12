@@ -164,7 +164,8 @@ class User_Management(commands.Cog):
 
     @commands.command()
     @commands.has_role(833822769048977409)
-    async def Warn(self, ctx, member: discord.Member):
+    async def Warn(self, ctx, member: discord.Member, *, reason=None):
+        server = "Demomute"
         id = member.mention
         id = id.strip("<")
         id = id.strip("@")
@@ -175,19 +176,44 @@ class User_Management(commands.Cog):
             S.data_entry(id, username, 1)
         elif current is not None:
             S.update(id)
-        response = await ctx.send(f"I have warned {member.display_name} they are now on {S.read_using_id(id)} warnings")
+        response = await ctx.send(f"I have warned {member.display_name} for {reason} they are now on {S.read_using_id(id)} warnings")
+        dm = await member.create_dm()
+        if reason == None:
+            reason = "No reason given"
+        embedvar = discord.Embed(title="Demomute Warning System")
+        embedvar.add_field(name="You have been warned", value=f"You was warned for {reason} by {ctx.author.mention}")
+        await dm.send(embed=embedvar)
         await asyncio.sleep(2)
         await response.delete()
         if S.read_using_id(id) >= 3:
+            S.update_history(id)
+            S.clear(id)
             tmute = self.client.get_command("Tempmute")
             await ctx.invoke(tmute, member, "1h", reason="Too many warnings")
             response2 = await ctx.send(f"{member.mention} Had more than three warnings they have been muted for 1h")
-            S.clear(ID)
             await asyncio.sleep(2)
             await response2.delete
 
 
-
+    @commands.command()
+    async def Warns(self, ctx, member: discord.Member):
+        id = member.mention
+        id = id.strip("<")
+        id = id.strip("@")
+        id = id.strip(">")
+        current = S.read_using_id(id)
+        if current == None:
+            current = 0
+        history = S.read_Histroy_ID(id)
+        if history == None:
+            history = 0
+        embedvar = discord.Embed(title="Demomute Warning System")
+        embedvar.add_field(name="Current warnings", value=f"The user {member.mention} has {current} warnings")
+        embedvar.add_field(name="Historical warnings", value=f"The user {member.mention} has {history} warnings")
+        response = await ctx.send(embed=embedvar)
+        await asyncio.sleep(5)
+        await response.delete()
+        await ctx.message.delete()
 
 
 def setup(client):

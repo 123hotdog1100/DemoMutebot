@@ -5,10 +5,16 @@ DIR = os.path.dirname(__file__)
 db = sqlite3.connect(os.path.join(DIR, "WarnsDB.db"))
 SQL = db.cursor()
 
+if os.path.isfile("WarnsDB.db"):
+    print("Warning Database found")
+if not os.path.isfile("WarnsDB.db"):
+    print("Created Warning database")
+
 
 def create_table():
     SQL.execute('create table if not exists Warns("ID" integer not null primary key unique,"Username" text not null,  '
-                '"Amount" integer)')
+                '"Amount" integer, "History" INTEGER)')
+    db.commit()
 
 
 def data_lookup():
@@ -25,8 +31,13 @@ def data_entry(ID: int, Username: str, Amount: int):
 def read_using_id(ID):
     SQL.execute(f"SELECT * FROM Warns WHERE ID={ID}")
     for row in SQL.fetchall():
-        print(row[2])
         return row[2]
+
+
+def read_Histroy_ID(ID):
+    SQL.execute(f"SELECT * FROM Warns WHERE ID={ID}")
+    for row in SQL.fetchall():
+        return row[3]
 
 
 def update(ID):
@@ -36,14 +47,32 @@ def update(ID):
         pass
     elif current is not None:
         current = current + 1
-    print(current)
     SQL.execute(f"UPDATE Warns SET Amount = {current} WHERE ID = {ID}")
     db.commit()
+
+
+def update_history(ID):
+    SQL.execute("SELECT * FROM Warns")
+    current = read_using_id(ID)
+    history = read_Histroy_ID(ID)
+    if history is None:
+        history = 0
+    history = history + current
+    SQL.execute(f"UPDATE Warns SET History = {history} WHERE ID = {ID}")
+    db.commit()
+    return history
+
 
 def clear(ID):
     SQL.execute(f"UPDATE Warns SET Amount = 0 WHERE ID = {ID}")
     db.commit()
 
+
 def close():
     SQL.close()
     db.close()
+
+
+SQL.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='Warns'")
+if len(SQL.fetchall()) == 0:
+    create_table()
