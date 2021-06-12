@@ -13,6 +13,13 @@ class User_Management(commands.Cog):
         guild = self.client.get_guild(833822533136416808)
 
 
+    def get_id(self, member):
+        id = member.mention
+        id = id.strip("<")
+        id = id.strip("@")
+        id = id.strip(">")
+        return id
+
     @commands.command(alias="kick", brief="kick a user", pass_context=True)
     @commands.has_permissions(kick_members=True)
     async def Kick(self, ctx, member: discord.Member, *, reason=None):
@@ -28,10 +35,9 @@ class User_Management(commands.Cog):
         await ctx.message.delete()
         await self.client.get_channel(834074140284813333).send(embed=embedvar)
 
-
     @commands.command(alias="ban", brief="ban a user")
     @commands.has_permissions(ban_members=True)
-    async def Ban(self, ctx, member: discord.Member,*, reason=None):
+    async def Ban(self, ctx, member: discord.Member, *, reason=None):
         if reason == None:
             reason = "No reason given"
         output = f"The moderator {ctx.author.mention} has kicked {member} for {reason}"
@@ -67,7 +73,6 @@ class User_Management(commands.Cog):
         await ctx.guild.unban(member)
         await self.client.get_channel(834074140284813333).send(embed=embedvar2)
 
-
     @commands.command(alias="tempmute", brief="tempmutes a user", description="This command tempmutes a user")
     @commands.has_permissions(ban_members=True)
     async def Tempmute(self, ctx, member: discord.Member, time, *, reason=None):
@@ -101,7 +106,6 @@ class User_Management(commands.Cog):
         await self.client.get_channel(834074140284813333).send(embed=embedvar2)
         await channel.send(f"You are no longer temp muted on {server}")
 
-
     @Ban.error
     async def Ban_error(self, ctx, error):
         print(error)
@@ -116,6 +120,7 @@ class User_Management(commands.Cog):
             response = await ctx.send("This command requires a member and time arguments")
             await asyncio.sleep(4)
             await response.delete()
+
     @Kick.error
     async def Kick_error(self, ctx, error):
         print(error)
@@ -146,7 +151,6 @@ class User_Management(commands.Cog):
             await asyncio.sleep(4)
             await response.delete()
 
-
     @Tempmute.error
     async def Tempmute_error(self, ctx, error):
         print(error)
@@ -175,7 +179,8 @@ class User_Management(commands.Cog):
             S.data_entry(id, username, 1)
         elif current is not None:
             S.update(id)
-        response = await ctx.send(f"I have warned {member.display_name} for {reason} they are now on {S.read_using_id(id)} warnings")
+        response = await ctx.send(
+            f"I have warned {member.display_name} for {reason} they are now on {S.read_using_id(id)} warnings")
         dm = await member.create_dm()
         if reason == None:
             reason = "No reason given"
@@ -208,8 +213,6 @@ class User_Management(commands.Cog):
             await asyncio.sleep(4)
             await response.delete()
 
-
-
     @commands.command()
     @commands.cooldown(1, 15, commands.BucketType.user)
     async def Warns(self, ctx, member: discord.Member):
@@ -231,20 +234,29 @@ class User_Management(commands.Cog):
         if length == 0:
             pass
         else:
-            for l in range(length):
-                r = S.reasons_read_using_id(id)
-                try:
-                    reason = next(r)
+            r = S.reasons_read_using_id(id)
+            try:
+                for value in r:
+                    reason = value
                     embedvar.add_field(name=f'Warning {number}', value=reason, inline=False)
                     number = 1 + number
-                except StopIteration:
-                    pass
+            except StopIteration:
+                pass
 
         response = await ctx.send(embed=embedvar)
         await asyncio.sleep(5)
-        await response.delete()
+        # await response.delete()
         await ctx.message.delete()
-
+    @commands.command()
+    @commands.has_role(833822769048977409)
+    async def clearwarns(self,ctx, member: discord.Member):
+        id = self.get_id(member)
+        S.delete(id)
+        S.clear(id)
+        S.clear_history(id)
+        response = await ctx.send("I have cleared the users warnings")
+        await asyncio.sleep(2)
+        await response.delete()
 
 def setup(client):
     client.add_cog(User_Management(client))
