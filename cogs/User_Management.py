@@ -196,6 +196,7 @@ class User_Management(commands.Cog):
 
 
     @commands.command()
+    @commands.cooldown(1, 30, commands.BucketType.user)
     async def Warns(self, ctx, member: discord.Member):
         id = member.mention
         id = id.strip("<")
