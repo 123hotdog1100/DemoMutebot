@@ -194,6 +194,21 @@ class User_Management(commands.Cog):
             await asyncio.sleep(2)
             await response2.delete
 
+    @Warn.error()
+    async def warn_error(self, ctx, error):
+        if isinstance(error, discord.ext.commands.errors.MissingPermissions):
+            response = await ctx.send("You do not have the required permissions for this command")
+            await asyncio.sleep(2)
+            await response.delete()
+            print(f"{ctx.author} Tried to use a elevated command in User_Management.py")
+            await self.client.get_channel(834074140284813333).send(
+                f"{ctx.author} Tried to use a elevated command in User Management Cog")
+        if isinstance(error, discord.ext.commands.errors.MissingRequiredArgument):
+            response = await ctx.send("This command requires a member argument")
+            await asyncio.sleep(4)
+            await response.delete()
+
+
 
     @commands.command()
     @commands.cooldown(1, 30, commands.BucketType.user)
