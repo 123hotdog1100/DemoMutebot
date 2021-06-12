@@ -194,7 +194,7 @@ class User_Management(commands.Cog):
             await asyncio.sleep(2)
             await response2.delete
 
-    @Warn.error()
+    @Warn.error
     async def warn_error(self, ctx, error):
         if isinstance(error, discord.ext.commands.errors.MissingPermissions):
             response = await ctx.send("You do not have the required permissions for this command")
