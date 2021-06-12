@@ -165,7 +165,6 @@ class User_Management(commands.Cog):
     @commands.command()
     @commands.has_role(833822769048977409)
     async def Warn(self, ctx, member: discord.Member, *, reason=None):
-        server = "Demomute"
         id = member.mention
         id = id.strip("<")
         id = id.strip("@")
@@ -180,6 +179,7 @@ class User_Management(commands.Cog):
         dm = await member.create_dm()
         if reason == None:
             reason = "No reason given"
+        S.data_entry_reasons(id, username, reason)
         embedvar = discord.Embed(title="Demomute Warning System")
         embedvar.add_field(name="You have been warned", value=f"You was warned for {reason} by {ctx.author.mention}")
         await dm.send(embed=embedvar)
@@ -211,7 +211,7 @@ class User_Management(commands.Cog):
 
 
     @commands.command()
-    @commands.cooldown(1, 30, commands.BucketType.user)
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def Warns(self, ctx, member: discord.Member):
         id = member.mention
         id = id.strip("<")
@@ -226,6 +226,20 @@ class User_Management(commands.Cog):
         embedvar = discord.Embed(title="Demomute Warning System")
         embedvar.add_field(name="Current warnings", value=f"The user {member.mention} has {current} warnings")
         embedvar.add_field(name="Historical warnings", value=f"The user {member.mention} has {history} warnings")
+        length = S.reasons_read_amount(id)
+        number = 1
+        if length == 0:
+            pass
+        else:
+            for l in range(length):
+                r = S.reasons_read_using_id(id)
+                try:
+                    reason = next(r)
+                    embedvar.add_field(name=f'Warning {number}', value=reason, inline=False)
+                    number = 1 + number
+                except StopIteration:
+                    pass
+
         response = await ctx.send(embed=embedvar)
         await asyncio.sleep(5)
         await response.delete()
