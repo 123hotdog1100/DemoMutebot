@@ -2,3 +2,4 @@ discord.py
 requests
 google-api-python-client
 python-dotenv
+sqlite3
