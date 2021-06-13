@@ -133,7 +133,7 @@ async def Twitch():
                 print(name)
             except TypeError as e:
                 print("Twitch whoopsie ", e)
-                pass
+                return
             chan = client.get_channel(834094513944920124)
             await send(name, 834094513944920124)
             await chan.edit(name="Now-Live!")
