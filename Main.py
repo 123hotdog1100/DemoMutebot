@@ -130,13 +130,14 @@ async def Twitch():
             done = 1
             try:
                 name = TwitchAPI.getstream(username, AUTH) + ' <@&834095415707041805>'
+                chan = client.get_channel(834094513944920124)
+                await send(name, 834094513944920124)
+                await chan.edit(name="Now-Live!")
                 print(name)
             except TypeError as e:
                 print("Twitch whoopsie ", e)
                 return
-            chan = client.get_channel(834094513944920124)
-            await send(name, 834094513944920124)
-            await chan.edit(name="Now-Live!")
+
         else:
             print("No Stream detected")
     else:
