@@ -193,6 +193,14 @@ async def clear_error(ctx, error):
 
 
 
+@client.event
+async def on_command_error(ctx, error):
+    if isinstance(error, discord.ext.commands.errors.CommandNotFound):
+        response = await ctx.send("Sorry i don't know that one.")
+        await asyncio.sleep(3)
+        await response.delete()
+        await ctx.message.delete()
+
 @client.command(pass_context=True)
 @commands.cooldown(1,30, commands.BucketType.user)
 async def help(ctx):
@@ -224,6 +232,7 @@ async def help(ctx):
 
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.User_Management")
+client.load_extension("cogs.fun_commands")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 print("Debug? ", debug)
 print("Starting Bot now!")
