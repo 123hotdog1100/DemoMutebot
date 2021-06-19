@@ -127,14 +127,15 @@ async def Twitch():
         print("Checking for twtich livestream")
         username = 'demomute'
         if TwitchAPI.checkUser(username, AUTH) == True:
-            done = 1
             try:
+                done = 1
                 name = TwitchAPI.getstream(username, AUTH) + ' <@&834095415707041805>'
                 chan = client.get_channel(834094513944920124)
                 await send(name, 834094513944920124)
                 await chan.edit(name="Now-Live!")
                 print(name)
             except TypeError as e:
+                Twitch.restart()
                 print("Twitch whoopsie ", e)
                 return
 
