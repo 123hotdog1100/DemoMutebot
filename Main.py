@@ -112,7 +112,7 @@ print("Twitch video notifications set to:", TW)
 
 
 @tasks.loop(seconds=15)
-async def Twitch():
+async def Twitch():##Runs the twitch check using custom coded twitch api interface
     global done
     if done == 1:
         check = TwitchAPI.checkUser("demomute", AUTH)
@@ -145,7 +145,7 @@ async def Twitch():
         pass
 
 
-@client.command(pass_context=True,alias="badboi")#,brief="Tells me I'm a bad boy")
+@client.command(pass_context=True,alias="badboi")
 @commands.cooldown(1,30, commands.BucketType.user)
 async def Badboi(ctx):
     mod = discord.utils.get(ctx.guild.roles, name="Mods")  # Gets the role "Mod" from the server

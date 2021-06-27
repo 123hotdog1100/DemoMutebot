@@ -1,7 +1,6 @@
 from datetime import datetime
 
 import discord
-from discord import PermissionOverwrite
 from discord.ext import commands
 
 
@@ -13,7 +12,7 @@ class Help_Requests(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
         guild = self.client.get_guild(833822533136416808)
-        overwrite = PermissionOverwrite()
+        overwrite = discord.PermissionOverwrite()
         overwrite.send_messages = True
         overwrite.read_messages = True
         senddm = "I have created a help channel for you mods will talk to you in there"
@@ -30,7 +29,7 @@ class Help_Requests(commands.Cog):
                     if channels.name == channamecheck:
                         check = True
                         break
-                    elif channels.name != channamecheck:
+                    elif channels.name is not channamecheck:
                         check = False
 
                 if check == True:
