@@ -92,7 +92,6 @@ SQL.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='Reasons
 if len(SQL.fetchall()) == 0:
     create_reasons_table()
     print("Created Reasons table")
-id = 11
 
 
 def reasons_read_amount(ID):

@@ -9,7 +9,7 @@ class fun_commands(commands.Cog):
         self.client = client
 
     @commands.command(aliases=['8ball', 'eightball', 'ball'])
-    @commands.has_role(833822769048977409) #833822769048977409, 852647243705614358
+    @commands.has_role(833822769048977409)
     async def _8ball(self, ctx, *, Question):
         responses = ["It is certain.",
                      "It is decidedly so.",

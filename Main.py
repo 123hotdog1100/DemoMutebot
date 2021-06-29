@@ -1,5 +1,4 @@
 import asyncio
-
 import discord
 from discord.ext import commands, tasks
 import dotenv
@@ -150,7 +149,7 @@ async def Twitch():##Runs the twitch check using custom coded twitch api interfa
 async def Badboi(ctx):
     mod = discord.utils.get(ctx.guild.roles, name="Mods")  # Gets the role "Mod" from the server
     admin = discord.utils.get(ctx.guild.roles, name=":)")  # Gets the role ":)" from the server
-    if mod or admin in ctx.author.roles:  # Checks if the user that sent the command has the correct role
+    if mod in ctx.author.roles or admin in ctx.author.roles:  # Checks if the user that sent the command has the correct role
         await ctx.send("<:FeelsSadFrogoman:834217399662149662>")
     else:
         await ctx.send("You're not my owner!")
