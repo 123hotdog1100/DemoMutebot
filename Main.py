@@ -233,6 +233,7 @@ async def help(ctx):
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.User_Management")
 client.load_extension("cogs.fun_commands")
+client.load_extension("cogs.Vote")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 print("Debug? ", debug)
 print("Starting Bot now!")
