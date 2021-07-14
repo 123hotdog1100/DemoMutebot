@@ -2,25 +2,25 @@ import asyncio
 import discord
 from discord.ext import commands
 
-
 class Vote(commands.Cog):
     def __init__(self, client):
         self.client = client
 
     @commands.command()
-    async def Vote(self, ctx, duration: int, *, vote):
+    async def Vote(self, ctx, duration, *, vote):
         global message, yes, no
         mod = discord.utils.get(ctx.guild.roles, name="Mods")  # Gets the role "Mod" from the server
         admin = discord.utils.get(ctx.guild.roles, name=":)")  # Gets the role ":)" from the server
         await ctx.message.delete()
         if mod in ctx.author.roles or admin in ctx.author.roles:
             output = False
-            embed = discord.Embed(title="Voting")
+            embed = discord.Embed(title=f"Voting Duration{duration}")
+            #embed.set_author(name=ctx.message.display_name, url=discord.Embed.Empty, icon_url=ctx.author.avatar_url)
             embed.add_field(name="Please vote on", value=vote)
             message = await ctx.send(embed=embed)
             await message.add_reaction('✅')
             await message.add_reaction("❌")
-            await asyncio.sleep(duration)
+            await asyncio.sleep(int(duration))
             yenlen = len(yes)
             nolen = len(no)
             if yenlen > nolen:
@@ -29,6 +29,7 @@ class Vote(commands.Cog):
                 output2 = True
             print("test", output)
             embed2 = discord.Embed(title="Voting resaults")
+            # embed2.set_author(name=ctx.message.display_name, icon_url=ctx.author.avatar_url)
             if output:
                 embed2.add_field(name=vote, value="Successful")
                 print(vote, " Was successfull")

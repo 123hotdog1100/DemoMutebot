@@ -229,6 +229,7 @@ async def help(ctx):
         embed.add_field(name=f"{prefix}Tempmute", value="Tempmutes the user for the time set", inline=False)
         embed.add_field(name=f"{prefix}clear", value="Deleted the amount of messages stated", inline=False)
         embed.add_field(name=f"{prefix}warn", value="Warns a user and pms them the reason", inline=False)
+        embed.add_field(name=f"{prefix}vote", value="Creates a vote in the Channel where the command was used", inline=False)
     if vip in ctx.author.roles:
         embed.add_field(name=f"{vip}'s Role permissions", value=f"You get the following commands from the {vip} role", inline=True)
         embed.add_field(name=f"{prefix}Goodboi", value="Tells me i'm a good boi", inline=False)
