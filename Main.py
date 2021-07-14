@@ -11,6 +11,10 @@ global store, done
 done = 0
 store = 0
 
+import logging
+
+logging.basicConfig(level=logging.INFO, filename="Discord.log")
+
 
 if os.path.isfile(".env"):  ##Checks to see if there is a .env file and if there isn't it will create it
     print("Discovered .env File")
