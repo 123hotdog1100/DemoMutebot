@@ -235,6 +235,14 @@ async def help(ctx):
         embed.add_field(name=f"{prefix}Goodboi", value="Tells me i'm a good boi", inline=False)
     await author.send(author, embed=embed)
 
+
+@help.error
+async def help_error(ctx, error):
+    if isinstance(error, discord.ext.commands.CommandOnCooldown):
+        response = await ctx.send("This command is on cooldown")
+        await asyncio.sleep(2)
+        await response.delete()
+
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.User_Management")
 client.load_extension("cogs.fun_commands")
