@@ -13,7 +13,7 @@ store = 0
 
 import logging
 
-logging.basicConfig(level=logging.INFO, filename="Discord.log")
+logging.basicConfig(level=logging.DEBUG, filename="Discord.log")
 
 
 if os.path.isfile(".env"):  ##Checks to see if there is a .env file and if there isn't it will create it
@@ -249,7 +249,7 @@ client.load_extension("cogs.fun_commands")
 client.load_extension("cogs.Vote")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 print("Debug? ", debug)
-print("Starting Bot now!")
+print("Starting Bot now")
 try:
     client.run(dotenv.get_key(".env", "APIKEY"))  ##Starts the bot
 except discord.errors.LoginFailure:
