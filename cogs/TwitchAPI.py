@@ -60,7 +60,7 @@ def getstream(Username, OAUTH):
         req = requests.get(URL, headers=HEADERS)
         jsondata = req.json()
         if len(jsondata['data']) == 1:
-            response = 'Demomute' + ' is live: ' + jsondata['data'][0]['title'] + ' playing ' + jsondata['data'][0]['game_name'] + f'{TWITCHURL}'
+            response = 'Demomute is live: ' + f'{TWITCHURL}'
             return response
         else:
             return False
