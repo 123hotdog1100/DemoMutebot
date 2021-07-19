@@ -28,8 +28,8 @@ def data_lookup():
     print(is_there[0])
 
 
-def data_entry(Table, ID: int, Username: str, Amount: int):
-    SQL.execute(f"insert into {Table}(ID, Username, Amount) values(?,?,?)", (ID, Username, Amount))
+def data_entry(ID: int, Username: str, Amount: int):
+    SQL.execute(f"insert into Warns(ID, Username, Amount) values(?,?,?)", (ID, Username, Amount))
     db.commit()
 
 
