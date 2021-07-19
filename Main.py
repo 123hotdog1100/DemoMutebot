@@ -210,6 +210,9 @@ async def on_command_error(ctx, error):
         await asyncio.sleep(3)
         await response.delete()
         await ctx.message.delete()
+    else:
+        await ctx.message.delete()
+        print(error)
 
 @client.command(pass_context=True)
 @commands.cooldown(1,30, commands.BucketType.user)
@@ -254,6 +257,7 @@ client.load_extension("cogs.User_Management")
 client.load_extension("cogs.fun_commands")
 client.load_extension("cogs.Vote")
 if dotenv.get_key(".env", "GameINT") == "True":
+    print("loading Game server Management")
     client.load_extension("cogs.Game Servers")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 print("Debug? ", debug)
