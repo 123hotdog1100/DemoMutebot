@@ -15,6 +15,7 @@ def create_warns_table():
     SQL.execute('create table if not exists Warns("ID" integer not null primary key unique,"Username" text not null,  '
                 '"Amount" integer, "History" INTEGER)')
 
+
 def create_reasons_table():
     SQL.execute('create table if not exists Reasons("ID" integer not null  ,"Username" text not null,  '
                 '"Reason" text not null )')

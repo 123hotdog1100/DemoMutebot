@@ -33,6 +33,12 @@ else:
         f.write("DEBUG=False\n")
         f.close()
         print("Please enter all your values in to the .env file and restart")
+if os.path.isfile("Whitelist.txt"):
+    pass
+else:
+    with open("Whitelist.txt", "w") as f:
+        pass
+
 
 prefix = dotenv.get_key(".env", "PREFIX")  # Sets the prefix that the bot will use
 print("Prefix set to", prefix)
@@ -247,6 +253,8 @@ client.load_extension("cogs.welcome")
 client.load_extension("cogs.User_Management")
 client.load_extension("cogs.fun_commands")
 client.load_extension("cogs.Vote")
+if dotenv.get_key(".env", "GameINT") == "True":
+    client.load_extension("cogs.Game Servers")
 client.load_extension("cogs.Private_Messages")  # Loads the Private_messages.py as a "cog"
 print("Debug? ", debug)
 print("Starting Bot now")
