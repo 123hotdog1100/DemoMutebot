@@ -4,7 +4,6 @@ from discord.ext import commands, tasks
 import dotenv
 import os
 
-
 intents = discord.Intents.default()
 intents.members = True
 global store, done
@@ -14,7 +13,6 @@ store = 0
 import logging
 
 logging.basicConfig(level=logging.DEBUG, filename="Discord.log")
-
 
 if os.path.isfile(".env"):  ##Checks to see if there is a .env file and if there isn't it will create it
     print("Discovered .env File")
@@ -39,12 +37,10 @@ else:
     with open("Whitelist.txt", "w") as f:
         pass
 
-
 prefix = dotenv.get_key(".env", "PREFIX")  # Sets the prefix that the bot will use
 print("Prefix set to", prefix)
 client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True)
 client.remove_command('help')
-
 
 debug = dotenv.get_key(".env", "DEBUG")
 
@@ -57,7 +53,8 @@ AUTH = TwitchAPI.getOauth()
 @client.event
 async def on_ready():  ##Waits for login and prints to the console that it has logged in and displays the user
     print('We have logged in as {0.user}'.format(client))
-    await client.change_presence(activity=discord.Game("Message me for help"))  # Changes the bot's status to the string specified
+    await client.change_presence(
+        activity=discord.Game("Message me for help"))  # Changes the bot's status to the string specified
     Twitch.start()
     Youtube.start()  ##Starts the youtube loop
     if debug == "True":
@@ -66,7 +63,8 @@ async def on_ready():  ##Waits for login and prints to the console that it has l
         await send("I have started successfully", 834074140284813333)
 
 
-@client.command(alias="Shutdown", brief="Turns the bot off", description="Turns the bot off but requires bot admin role")
+@client.command(alias="Shutdown", brief="Turns the bot off",
+                description="Turns the bot off but requires bot admin role")
 async def shutdown(ctx):  # Turns the bot off
     botmin = discord.utils.get(ctx.guild.roles, name="Bot Admin")  ##Gets the role "Bot Admin" from the server
     if botmin in ctx.author.roles:  # Checks if the user that sent the command has the correct role
@@ -121,7 +119,7 @@ print("Twitch video notifications set to:", TW)
 
 
 @tasks.loop(seconds=15)
-async def Twitch():##Runs the twitch check using custom coded twitch api interface
+async def Twitch():  ##Runs the twitch check using custom coded twitch api interface
     global done
     if done == 1:
         check = TwitchAPI.checkUser("demomute", AUTH)
@@ -131,6 +129,7 @@ async def Twitch():##Runs the twitch check using custom coded twitch api interfa
             chan = client.get_channel(834094513944920124)
             await chan.edit(name="Stream-Offline")
             print("Recieved no live stream starting to check for one again")
+            status.stop()
 
     elif TW == "True":
         print("Checking for twtich livestream")
@@ -142,6 +141,7 @@ async def Twitch():##Runs the twitch check using custom coded twitch api interfa
                 chan = client.get_channel(834094513944920124)
                 await send(name, 834094513944920124)
                 await chan.edit(name="Now-Live!")
+                status.start()
                 print(name)
             except TypeError as e:
                 Twitch.restart()
@@ -154,8 +154,21 @@ async def Twitch():##Runs the twitch check using custom coded twitch api interfa
         pass
 
 
-@client.command(pass_context=True,alias="badboi")
-@commands.cooldown(1,30, commands.BucketType.user)
+@tasks.loop()
+async def status():
+    username = 'demomute'
+    await client.change_presence(activity=discord.Streaming(name=TwitchAPI.getstream(username, AUTH),
+                                                                url="https://www.twitch.tv/demomute"))
+    await asyncio.sleep(20)
+    await client.change_presence(activity=discord.Game("Message me for help"))
+
+
+@status.after_loop
+async def status_after_loop():
+    await client.change_presence(activity=discord.Game("Message me for help"))
+
+@client.command(pass_context=True, alias="badboi")
+@commands.cooldown(1, 30, commands.BucketType.user)
 async def Badboi(ctx):
     mod = discord.utils.get(ctx.guild.roles, name="Mods")  # Gets the role "Mod" from the server
     admin = discord.utils.get(ctx.guild.roles, name=":)")  # Gets the role ":)" from the server
@@ -165,8 +178,8 @@ async def Badboi(ctx):
         await ctx.send("You're not my owner!")
 
 
-@client.command(pass_context=True,alias="goodboi",brief="Tells me I'm a good boy")
-@commands.cooldown(1,30, commands.BucketType.user)
+@client.command(pass_context=True, alias="goodboi", brief="Tells me I'm a good boy")
+@commands.cooldown(1, 30, commands.BucketType.user)
 async def Goodboi(ctx):
     mod = discord.utils.get(ctx.guild.roles, name="Mods")  # Gets the role "Mod" from the server
     admin = discord.utils.get(ctx.guild.roles, name=":)")  # Gets the role ":)" from the server
@@ -177,7 +190,7 @@ async def Goodboi(ctx):
         await ctx.send("I am a good boi but you're clearly not ")
 
 
-@client.command(pass_context=True,alias="c", brief="Delete amount of messages stated")
+@client.command(pass_context=True, alias="c", brief="Delete amount of messages stated")
 @commands.has_permissions(manage_channels=True)
 async def clear(ctx, amount: int):
     if amount > 100:
@@ -191,6 +204,7 @@ async def clear(ctx, amount: int):
     await asyncio.sleep(3)
     await response.delete()
 
+
 @clear.error
 async def clear_error(ctx, error):
     if isinstance(error, commands.MissingRequiredArgument):
@@ -200,7 +214,6 @@ async def clear_error(ctx, error):
         await response.delete()
     else:
         print(error)
-
 
 
 @client.event
@@ -214,8 +227,9 @@ async def on_command_error(ctx, error):
         await ctx.message.delete()
         print(error)
 
+
 @client.command(pass_context=True)
-@commands.cooldown(1,30, commands.BucketType.user)
+@commands.cooldown(1, 30, commands.BucketType.user)
 async def help(ctx):
     author = ctx.message.author
 
@@ -238,9 +252,11 @@ async def help(ctx):
         embed.add_field(name=f"{prefix}Tempmute", value="Tempmutes the user for the time set", inline=False)
         embed.add_field(name=f"{prefix}clear", value="Deleted the amount of messages stated", inline=False)
         embed.add_field(name=f"{prefix}warn", value="Warns a user and pms them the reason", inline=False)
-        embed.add_field(name=f"{prefix}vote", value="Creates a vote in the Channel where the command was used", inline=False)
+        embed.add_field(name=f"{prefix}vote", value="Creates a vote in the Channel where the command was used",
+                        inline=False)
     if vip in ctx.author.roles:
-        embed.add_field(name=f"{vip}'s Role permissions", value=f"You get the following commands from the {vip} role", inline=True)
+        embed.add_field(name=f"{vip}'s Role permissions", value=f"You get the following commands from the {vip} role",
+                        inline=True)
         embed.add_field(name=f"{prefix}Goodboi", value="Tells me i'm a good boi", inline=False)
     await author.send(author, embed=embed)
 
@@ -251,6 +267,7 @@ async def help_error(ctx, error):
         response = await ctx.send("This command is on cooldown")
         await asyncio.sleep(2)
         await response.delete()
+
 
 client.load_extension("cogs.welcome")
 client.load_extension("cogs.User_Management")
