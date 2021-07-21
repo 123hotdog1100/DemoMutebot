@@ -28,7 +28,9 @@ else:
         f.write("TWITCHAPI=\n")
         f.write("TWITCHAPISECRET=\n")
         f.write("PREFIX=%\n")
-        f.write("DEBUG=False\n")
+        f.write("PTEROKEY=None\n")
+        f.write("GameINT=False\n")
+        f.write("ServerID=000000\n")
         f.close()
         print("Please enter all your values in to the .env file and restart")
 if os.path.isfile("Whitelist.txt"):
