@@ -109,3 +109,9 @@ def delete(ID):
     SQL.execute("DELETE FROM Reasons WHERE ID=?", (ID,))
     db.commit()
     SQL.execute("SELECT * FROM Reasons WHERE ID=?", (ID,))
+
+def wipe_warns():
+    SQL.execute("DELETE FROM Warns")
+    db.commit()
+    SQL.execute("DELETE FROM Reasons")
+    db.commit()

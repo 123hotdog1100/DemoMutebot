@@ -1,4 +1,6 @@
 import asyncio
+
+import cogs.SQLite
 import cogs.SQLite as S
 import discord
 
@@ -247,6 +249,16 @@ class User_Management(commands.Cog):
         await asyncio.sleep(5)
         # await response.delete()
         await ctx.message.delete()
+
+    @commands.command()
+    async def WipePun(self,ctx):
+        admin = discord.utils.get(ctx.guild.roles, name="Bot Admin")
+        if admin in ctx.author.roles:
+            S.wipe_warns()
+            response = await ctx.send("I have wiped the warnings database!")
+            await asyncio.sleep(2)
+            await response.delete()
+
     @commands.command()
     @commands.has_role(833822769048977409)
     async def clearwarns(self,ctx, member: discord.Member):
