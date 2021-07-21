@@ -3,8 +3,6 @@ import asyncio
 from discord.ext import commands
 import discord
 import cogs.PterodactylAPI as ptero
-import json
-
 
 class Game_Servers(commands.Cog):
     def __init__(self, client):

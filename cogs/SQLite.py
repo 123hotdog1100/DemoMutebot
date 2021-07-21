@@ -72,13 +72,16 @@ def clear(ID):
     SQL.execute(f"UPDATE Warns SET Amount = 0 WHERE ID = {ID}")
     db.commit()
 
+
 def clear_history(ID):
     SQL.execute(f"UPDATE Warns SET History = 0 WHERE ID = {ID}")
     db.commit()
 
+
 def data_entry_reasons(ID: int, Username: str, Reason: str):
     SQL.execute("insert into Reasons(ID, Username, Reason) values(?,?,?)", (ID, Username, Reason))
     db.commit()
+
 
 def close():
     SQL.close()
@@ -99,16 +102,19 @@ def reasons_read_amount(ID):
     SQL.execute(f"SELECT * FROM Reasons WHERE ID={ID}")
     return len(SQL.fetchall())
 
+
 def reasons_read_using_id(ID: int):
     SQL.execute("SELECT * FROM Reasons WHERE ID=?", (ID,))
     for row in SQL.fetchall():
         print(row[2])
         yield row[2]
 
+
 def delete(ID):
     SQL.execute("DELETE FROM Reasons WHERE ID=?", (ID,))
     db.commit()
     SQL.execute("SELECT * FROM Reasons WHERE ID=?", (ID,))
+
 
 def wipe_warns():
     SQL.execute("DELETE FROM Warns")

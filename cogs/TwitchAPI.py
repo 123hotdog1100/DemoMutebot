@@ -1,5 +1,4 @@
-import requests, json, sys
-from time import sleep
+import requests
 import dotenv
 
 BASE_URL = 'https://api.twitch.tv/helix/'
@@ -9,7 +8,7 @@ OAUTHHEADERS = {'client_id': CLIENT_ID, 'client_secret': CLIENT_SECRET, 'grant_t
 OAUTHURL = "https://id.twitch.tv/oauth2/token"
 
 
-def getOauth():##This function gets the oauth2 token which is required for interacting with the twitchAPI
+def getOauth():  # This function gets the oauth2 token which is required for interacting with the twitchAPI
     try:
         req = requests.post(OAUTHURL, OAUTHHEADERS)
         jsondata = req.json()
@@ -20,9 +19,9 @@ def getOauth():##This function gets the oauth2 token which is required for inter
         print(e)
 
 
-def checkUser(Username, OAUTH):##Checks to see if someone is live
-    HEADERS = {'client-id': CLIENT_ID, 'Authorization': 'Bearer ' + OAUTH}
-    URL = BASE_URL + 'streams?user_login=' + Username
+def checkUser(username, oauth):  # Checks to see if someone is live
+    HEADERS = {'client-id': CLIENT_ID, 'Authorization': 'Bearer ' + oauth}
+    URL = BASE_URL + 'streams?user_login=' + username
     try:
         req = requests.get(URL, headers=HEADERS)
         jsondata = req.json()
@@ -35,9 +34,11 @@ def checkUser(Username, OAUTH):##Checks to see if someone is live
         return False
 
 
-def getUserID(Username, OAUTH):##Gets the USERSID based on the Username they are given and also uses the OAUTH token generated above
-    HEADERS = {'client-id': CLIENT_ID, 'Authorization': 'Bearer ' + OAUTH}
-    URL = BASE_URL + "users?login=" + Username
+def getUserID(username,
+              oauth):  # Gets the USERSID based on the Username they are given and also uses the OAUTH token
+    # generated above
+    HEADERS = {'client-id': CLIENT_ID, 'Authorization': 'Bearer ' + oauth}
+    URL = BASE_URL + "users?login=" + username
     try:
         req = requests.get(URL, headers=HEADERS)
         jsondata = req.json()
@@ -48,14 +49,14 @@ def getUserID(Username, OAUTH):##Gets the USERSID based on the Username they are
     except Exception as e:
         print(e)
 
-    #except Exception as e:
-     #   print("Error getting ID for: ", Username, "Caused by: ", e)
+    # except Exception as e:
+    #   print("Error getting ID for: ", Username, "Caused by: ", e)
 
 
-def getstream(Username, OAUTH):
+def getstream(username, oauth):
     TWITCHURL = " https://www.twitch.tv/demomute"
-    HEADERS = {'client-id': CLIENT_ID, 'Authorization': 'Bearer ' + OAUTH}
-    URL = BASE_URL + 'streams?user_login=' + Username
+    HEADERS = {'client-id': CLIENT_ID, 'Authorization': 'Bearer ' + oauth}
+    URL = BASE_URL + 'streams?user_login=' + username
     try:
         req = requests.get(URL, headers=HEADERS)
         jsondata = req.json()
@@ -70,6 +71,3 @@ def getstream(Username, OAUTH):
 
 
 AUTH = getOauth()
-
-#print(getUserID("hotdog1100", AUTH))
-#print(checkUser("demomute", AUTH))

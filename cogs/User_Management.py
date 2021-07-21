@@ -1,11 +1,8 @@
 import asyncio
-
-import cogs.SQLite
 import cogs.SQLite as S
 import discord
 
 from discord.ext import commands
-from discord.ext.commands import Cog
 
 
 # This file is to deal with all of the private message issues
@@ -13,7 +10,6 @@ class User_Management(commands.Cog):
     def __init__(self, client):
         self.client = client
         guild = self.client.get_guild(833822533136416808)
-
 
     def get_id(self, member):
         id = member.mention
@@ -251,7 +247,7 @@ class User_Management(commands.Cog):
         await ctx.message.delete()
 
     @commands.command()
-    async def WipePun(self,ctx):
+    async def WipePun(self, ctx):
         admin = discord.utils.get(ctx.guild.roles, name="Bot Admin")
         if admin in ctx.author.roles:
             S.wipe_warns()
@@ -261,7 +257,7 @@ class User_Management(commands.Cog):
 
     @commands.command()
     @commands.has_role(833822769048977409)
-    async def clearwarns(self,ctx, member: discord.Member):
+    async def clearwarns(self, ctx, member: discord.Member):
         id = self.get_id(member)
         S.delete(id)
         S.clear(id)
@@ -269,6 +265,7 @@ class User_Management(commands.Cog):
         response = await ctx.send("I have cleared the users warnings")
         await asyncio.sleep(2)
         await response.delete()
+
 
 def setup(client):
     client.add_cog(User_Management(client))
