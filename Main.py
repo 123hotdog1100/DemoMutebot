@@ -65,8 +65,7 @@ async def on_ready():  ##Waits for login and prints to the console that it has l
         await send("I have started successfully", 834074140284813333)
 
 
-@client.command(alias="Shutdown", brief="Turns the bot off",
-                description="Turns the bot off but requires bot admin role")
+@client.command(alias="Shutdown")
 async def shutdown(ctx):  # Turns the bot off
     botmin = discord.utils.get(ctx.guild.roles, name="Bot Admin")  ##Gets the role "Bot Admin" from the server
     if botmin in ctx.author.roles:  # Checks if the user that sent the command has the correct role
@@ -185,7 +184,7 @@ async def Badboi(ctx):
         await ctx.send("You're not my owner!")
 
 
-@client.command(pass_context=True, alias="goodboi", brief="Tells me I'm a good boy")
+@client.command(pass_context=True, alias="goodboi")
 @commands.cooldown(1, 30, commands.BucketType.user)
 async def Goodboi(ctx):
     mod = discord.utils.get(ctx.guild.roles, name="Mods")  # Gets the role "Mod" from the server
@@ -197,7 +196,7 @@ async def Goodboi(ctx):
         await ctx.send("I am a good boi but you're clearly not ")
 
 
-@client.command(pass_context=True, alias="c", brief="Delete amount of messages stated")
+@client.command(pass_context=True, alias="c")
 @commands.has_permissions(manage_channels=True)
 async def clear(ctx, amount: int):
     if amount > 100:

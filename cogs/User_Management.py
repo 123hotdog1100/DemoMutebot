@@ -18,7 +18,7 @@ class User_Management(commands.Cog):
         id = id.strip(">")
         return id
 
-    @commands.command(alias="kick", brief="kick a user", pass_context=True)
+    @commands.command(alias="kick", pass_context=True)
     @commands.has_permissions(kick_members=True)
     async def Kick(self, ctx, member: discord.Member, *, reason=None):
         if reason == None:
@@ -33,7 +33,7 @@ class User_Management(commands.Cog):
         await ctx.message.delete()
         await self.client.get_channel(834074140284813333).send(embed=embedvar)
 
-    @commands.command(alias="ban", brief="ban a user")
+    @commands.command(alias="ban")
     @commands.has_permissions(ban_members=True)
     async def Ban(self, ctx, member: discord.Member, *, reason=None):
         if reason == None:
@@ -48,7 +48,7 @@ class User_Management(commands.Cog):
         await ctx.message.delete()
         await self.client.get_channel(834074140284813333).send(embed=embedvar)
 
-    @commands.command(alias="tempban", brief="tempbans a user", description="This command tempbans a user")
+    @commands.command(alias="tb")
     @commands.has_permissions(ban_members=True)
     async def Tempban(self, ctx, member: discord.Member, time, *, reason=None):
         time_convert = {"s": 1, "m": 60, "h": 3600, "d": 86400}
@@ -71,7 +71,7 @@ class User_Management(commands.Cog):
         await ctx.guild.unban(member)
         await self.client.get_channel(834074140284813333).send(embed=embedvar2)
 
-    @commands.command(alias="tempmute", brief="tempmutes a user", description="This command tempmutes a user")
+    @commands.command(alias="tempmute")
     @commands.has_permissions(ban_members=True)
     async def Tempmute(self, ctx, member: discord.Member, time, *, reason=None):
         time_convert = {"s": 1, "m": 60, "h": 3600, "d": 86400}
