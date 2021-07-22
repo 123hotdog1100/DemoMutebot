@@ -4,6 +4,8 @@ from discord.ext import commands, tasks
 import dotenv
 import os
 
+
+start = False
 intents = discord.Intents.default()
 intents.members = True
 global store, done
@@ -121,7 +123,7 @@ print("Twitch video notifications set to:", TW)
 
 @tasks.loop(seconds=15)
 async def Twitch():  ##Runs the twitch check using custom coded twitch api interface
-    global done
+    global done, start
     if done == 1:
         check = TwitchAPI.checkUser("demomute", AUTH)
         print("Is there still a live stream?", check)
@@ -144,7 +146,11 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
                 chan = client.get_channel(834094513944920124)
                 await send(name, 834094513944920124)
                 await chan.edit(name="Now-Live!")
-                status.start()
+                if not start:
+                    status.start()
+                    start = True
+                elif start:
+                    pass
                 with open("notification", "w") as f:
                     f.close()
                 print(name)
