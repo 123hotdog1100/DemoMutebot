@@ -130,13 +130,15 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
             done = 0
             chan = client.get_channel(834094513944920124)
             await chan.edit(name="Stream-Offline")
+            print("Boo")
+            os.remove("notification")
             print("Recieved no live stream starting to check for one again")
             status.stop()
 
     elif TW == "True":
         print("Checking for twtich livestream")
         username = 'demomute'
-        if TwitchAPI.checkUser(username, AUTH) == True:
+        if TwitchAPI.checkUser(username, AUTH) and not os.path.isfile("notification"):
             try:
                 done = 1
                 name = TwitchAPI.getstream(username, AUTH) + ' <@&834095415707041805>'
@@ -144,6 +146,8 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
                 await send(name, 834094513944920124)
                 await chan.edit(name="Now-Live!")
                 status.start()
+                with open("notification", "w") as f:
+                    f.close()
                 print(name)
             except TypeError as e:
                 Twitch.restart()
@@ -152,6 +156,7 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
 
         else:
             print("No Stream detected")
+            os.remove("notification")
     else:
         pass
 
