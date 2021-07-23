@@ -123,7 +123,7 @@ print("Twitch video notifications set to:", TW)
 
 @tasks.loop(seconds=15)
 async def Twitch():  ##Runs the twitch check using custom coded twitch api interface
-    global done, start
+    global done, start, loop
     if done == 1:
         check = TwitchAPI.checkUser("demomute", AUTH)
         print("Is there still a live stream?", check)
@@ -148,6 +148,7 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
                 if not start:
                     status.start()
                     start = True
+                    loop = 1
                 elif start:
                     pass
                 with open("notification", "w") as f:
@@ -165,13 +166,16 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
         pass
 
 
-@tasks.loop()
+@tasks.loop(seconds=20)
 async def status():
+    global loop
     username = 'demomute'
-    await client.change_presence(activity=discord.Streaming(name=TwitchAPI.getstream(username, AUTH),
-                                                                url="https://www.twitch.tv/demomute"))
-    await asyncio.sleep(20)
-    await client.change_presence(activity=discord.Game("Message me for help"))
+    if loop == 1:
+        await client.change_presence(activity=discord.Streaming(name=TwitchAPI.getstream(username, AUTH),url="https://www.twitch.tv/demomute"))
+        loop = 0
+    elif loop == 0:
+        await client.change_presence(activity=discord.Game("Message me for help"))
+        loop = 1
 
 
 @status.after_loop
