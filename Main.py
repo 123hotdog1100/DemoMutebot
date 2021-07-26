@@ -138,7 +138,7 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
     elif TW == "True":
         print("Checking for twtich livestream")
         username = 'demomute'
-        if TwitchAPI.checkUser(username, AUTH) and not os.path.isfile("notification"):
+        if TwitchAPI.checkUser(username, AUTH):
             try:
                 done = 1
                 name = TwitchAPI.getstream(username, AUTH) + ' <@&834095415707041805>'
@@ -166,7 +166,7 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
         pass
 
 
-@tasks.loop(seconds=20)
+@tasks.loop(seconds=30)
 async def status():
     global loop
     username = 'demomute'
