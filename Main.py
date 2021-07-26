@@ -3,7 +3,7 @@ import discord
 from discord.ext import commands, tasks
 import dotenv
 import os
-
+import cogs.DemoAPI as D
 
 start = False
 intents = discord.Intents.default()
@@ -47,11 +47,8 @@ client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=T
 client.remove_command('help')
 
 debug = dotenv.get_key(".env", "DEBUG")
-
-from cogs import TwitchAPI as TwitchAPI  # Imports custom twitchAPI libary
 from cogs import YoutubeAPI as YoutubeAPI  # Imports custom YoutubeAPI libary
 
-AUTH = TwitchAPI.getOauth()
 
 
 @client.event
@@ -60,7 +57,7 @@ async def on_ready():  ##Waits for login and prints to the console that it has l
     await client.change_presence(
         activity=discord.Game("Message me for help"))  # Changes the bot's status to the string specified
     Twitch.start()
-    Youtube.start()  ##Starts the youtube loop
+    #Youtube.start()  ##Starts the youtube loop
     if debug == "True":
         await send("I am in debug mode i will not check for twitch streams", 834074140284813333)
     else:
@@ -94,24 +91,24 @@ else:
 print("Youtube video Notifications set to: " + YT)  # Prints what the option was set to
 
 
-@tasks.loop(seconds=30)
-async def Youtube():  ##Checks youtube for a new upload
-    global store
-    username = 'demomute'
-    if YT == "True":
-        print("Checking Youtube")
-        num = YoutubeAPI.check(username)
-        num = int(num)
-        print("Checked value: ", num, "Cached Value: ", store)
-        if num > store:
-            test = "Demomute Just uploaded!! ", YoutubeAPI.conversion(username), " <@&834169017480642572>"
-            str = ''.join(test)
-            await send(str, 834168559843147816)
-            store = num
-        elif num < store:
-            store = num
-        else:
-            pass
+#@tasks.loop(seconds=30)
+#async def Youtube():  ##Checks youtube for a new upload
+ #   global store
+  #  username = 'demomute'
+   # if YT == "True":
+    #    print("Checking Youtube")
+     #   num = YoutubeAPI.check(username)
+      #  num = int(num)
+       # print("Checked value: ", num, "Cached Value: ", store)
+        #if num > store:
+         #   test = "Demomute Just uploaded!! ", YoutubeAPI.conversion(username), " <@&834169017480642572>"
+          #  str = ''.join(test)
+           # await send(str, 834168559843147816)
+            #store = num
+        #elif num < store:
+         #   store = num
+        #else:
+         #   pass
 
 
 if debug == "True":
@@ -124,8 +121,10 @@ print("Twitch video notifications set to:", TW)
 @tasks.loop(seconds=15)
 async def Twitch():  ##Runs the twitch check using custom coded twitch api interface
     global done, start, loop
+    username = 'demomute'
+    ID = 1
+    check = D.check_user(1, username)
     if done == 1:
-        check = TwitchAPI.checkUser("demomute", AUTH)
         print("Is there still a live stream?", check)
         if not check:
             done = 0
@@ -137,11 +136,10 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
 
     elif TW == "True":
         print("Checking for twtich livestream")
-        username = 'demomute'
-        if TwitchAPI.checkUser(username, AUTH):
+        if check:
             try:
                 done = 1
-                name = TwitchAPI.getstream(username, AUTH) + ' <@&834095415707041805>'
+                name = D.get_stream(1,username) + ' <@&834095415707041805>'
                 chan = client.get_channel(834094513944920124)
                 await send(name, 834094513944920124)
                 await chan.edit(name="Now-Live!")
@@ -151,17 +149,15 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
                     loop = 1
                 elif start:
                     pass
-                with open("notification", "w") as f:
-                    f.close()
                 print(name)
             except TypeError as e:
                 Twitch.restart()
                 print("Twitch whoopsie ", e)
+                done = 0
                 return
 
         else:
             print("No Stream detected")
-            os.remove("notification")
     else:
         pass
 
