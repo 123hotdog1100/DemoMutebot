@@ -137,7 +137,7 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
                     try:
                         name = D.get_stream(1, username) + ' <@&834095415707041805>'
                         chan = client.get_channel(834094513944920124)
-                        #await send(name, 834094513944920124)
+                        await send(name, 834094513944920124)
                         await chan.edit(name="Now-Live!")
                         D.done(1)
                         done = True
