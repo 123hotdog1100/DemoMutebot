@@ -1,7 +1,7 @@
 import requests
+import dotenv
 
-BASE = "http://127.0.0.1:5000/"
-
+BASE = "http://" +  dotenv.get_key(".env", "BASEAPIURL")
 def get_stream(ID,Username):##Gets stream name
 
     r= requests.get(BASE + "sync/1", {'Command': 'getstream','ID': ID, 'Username': Username})
