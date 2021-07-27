@@ -1,4 +1,6 @@
 import asyncio
+import json.decoder
+
 import discord
 from discord.ext import commands, tasks
 import dotenv
@@ -6,7 +8,7 @@ import os
 import cogs.DemoAPI as D
 
 start = False
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 intents.members = True
 global store, done
 done = 0
@@ -43,7 +45,7 @@ else:
 
 prefix = dotenv.get_key(".env", "PREFIX")  # Sets the prefix that the bot will use
 print("Prefix set to", prefix)
-client = commands.Bot(command_prefix=prefix, intents=intents, case_insensitive=True)
+client = commands.Bot(command_prefix=prefix, intents=discord.Intents.all(), case_insensitive=True)
 client.remove_command('help')
 
 debug = dotenv.get_key(".env", "DEBUG")
@@ -121,58 +123,66 @@ print("Twitch video notifications set to:", TW)
 @tasks.loop(seconds=15)
 async def Twitch():  ##Runs the twitch check using custom coded twitch api interface
     global done, start, loop
+    guild = client.get_guild(id=833822533136416808)
+    demomute = guild.get_member(495732219759820801)
+    if "Streaming name" in str(demomute.activities):
+        stream = True
     username = 'demomute'
-    ID = 1
     check = D.check_user(1, username)
-    if done == 1:
-        print("Is there still a live stream?", check)
-        if not check:
-            done = 0
-            chan = client.get_channel(834094513944920124)
-            await chan.edit(name="Stream-Offline")
-            os.remove("notification")
-            print("Recieved no live stream starting to check for one again")
-            status.stop()
+    if not D.check(1):
+        try:
+            if TW == "True":
+                print("Checking for twtich livestream")
+                if check:
+                    try:
+                        name = D.get_stream(1, username) + ' <@&834095415707041805>'
+                        chan = client.get_channel(834094513944920124)
+                        #await send(name, 834094513944920124)
+                        await chan.edit(name="Now-Live!")
+                        D.done(1)
+                        done = True
+                        if not start:
+                            status.start()
+                            start = True
+                            loop = 1
+                        elif start:
+                            pass
+                        print(name)
+                    except TypeError as e:
+                        Twitch.restart()
+                        print("Twitch whoopsie ", e)
+                        return
 
-    elif TW == "True":
-        print("Checking for twtich livestream")
-        if check:
-            try:
-                done = 1
-                name = D.get_stream(1,username) + ' <@&834095415707041805>'
-                chan = client.get_channel(834094513944920124)
-                await send(name, 834094513944920124)
-                await chan.edit(name="Now-Live!")
-                if not start:
-                    status.start()
-                    start = True
-                    loop = 1
-                elif start:
-                    pass
-                print(name)
-            except TypeError as e:
-                Twitch.restart()
-                print("Twitch whoopsie ", e)
-                done = 0
-                return
+                else:
+                    print("No Stream detected")
+            else:
+                pass
+        except json.decoder.JSONDecodeError as e:
+            print(e)
+    elif not D.check_user(1, username) and done and not stream:
+        done = False
+        chan = client.get_channel(834094513944920124)
+        await chan.edit(name="Stream-Offline")
+        print("Recieved no live stream starting to check for one again")
+        status.stop()
 
-        else:
-            print("No Stream detected")
     else:
+        print("Skipping check")
         pass
-
 
 @tasks.loop(seconds=30)
 async def status():
     global loop
     username = 'demomute'
-    if loop == 1:
-        await client.change_presence(activity=discord.Streaming(name=TwitchAPI.getstream(username, AUTH),url="https://www.twitch.tv/demomute"))
-        loop = 0
-    elif loop == 0:
-        await client.change_presence(activity=discord.Game("Message me for help"))
-        loop = 1
-
+    try:
+        if loop == 1:
+            await client.change_presence(activity=discord.Streaming(name=D.get_stream(1, username),url="https://www.twitch.tv/demomute"))
+            loop = 0
+        elif loop == 0:
+            await client.change_presence(activity=discord.Game("Message me for help"))
+            loop = 1
+    except:
+        pass
 
 @status.after_loop
 async def status_after_loop():

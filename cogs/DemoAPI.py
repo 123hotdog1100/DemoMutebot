@@ -20,7 +20,7 @@ def done(ID):
 def check(ID):
     r = requests.get(BASE + "sync/1", {'Command': 'getchecked', 'ID': ID})
     if r.json() == 201:
-        return False
+        return True
 def update(ID):
     r = requests.patch(BASE + "sync/1")
     if r.status_code == 404:
