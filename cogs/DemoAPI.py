@@ -28,8 +28,3 @@ def update(ID):
         return False
     if r.json() == 200:
         return True
-
-print(done(1))
-print(check(1))
-print(update(1))
-print(check(1))
