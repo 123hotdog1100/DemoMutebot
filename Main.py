@@ -165,6 +165,7 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
         chan = client.get_channel(834094513944920124)
         await chan.edit(name="Stream-Offline")
         print("Recieved no live stream starting to check for one again")
+        D.update(1)
         status.stop()
 
     else:
