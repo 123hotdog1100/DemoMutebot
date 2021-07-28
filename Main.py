@@ -72,7 +72,7 @@ async def shutdown(ctx):  # Turns the bot off
     if botmin in ctx.author.roles:  # Checks if the user that sent the command has the correct role
         print("Recieved shutdown command")
         await ctx.send("Shutting the bot down")
-        Youtube.stop()
+        #Youtube.stop()
         Twitch.stop()
         await client.close()
     else:
@@ -90,7 +90,7 @@ if debug == "False":
 else:
     YT = dotenv.get_key(".env", "YTVIDNOT")  ##Gets the YT Notification option
 
-print("Youtube video Notifications set to: " + YT)  # Prints what the option was set to
+#print("Youtube video Notifications set to: " + YT)  # Prints what the option was set to
 
 
 #@tasks.loop(seconds=30)
