@@ -155,6 +155,7 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
                         return
 
                 else:
+                    D.update(1)
                     print("No Stream detected")
             else:
                 pass
