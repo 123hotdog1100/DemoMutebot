@@ -123,11 +123,12 @@ print("Twitch video notifications set to:", TW)
 @tasks.loop(seconds=15)
 async def Twitch():  ##Runs the twitch check using custom coded twitch api interface
     global done, start, loop
-    stream = False
     guild = client.get_guild(id=833822533136416808)
     demomute = guild.get_member(495732219759820801)
     if "Streaming name" in str(demomute.activities):
         stream = True
+    else:
+        stream = False
     username = 'demomute'
     check = D.check_user(1, username)
     if not D.check(1):
