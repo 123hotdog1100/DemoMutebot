@@ -3,6 +3,7 @@ from discord.ext import commands
 import random
 import asyncio
 
+
 # This file is to deal with all of the private message issues
 class fun_commands(commands.Cog):
     def __init__(self, client):
@@ -33,7 +34,6 @@ class fun_commands(commands.Cog):
                      "Very doubtful."]
         await ctx.send(f'Question : {Question}\nAnswer :{random.choice(responses)}')
 
-
     @_8ball.error
     async def _8ball_error(self, ctx, error):
         if isinstance(error, discord.ext.commands.errors.MissingRole):
@@ -46,6 +46,27 @@ class fun_commands(commands.Cog):
             await asyncio.sleep(4)
             await response.delete()
 
+    @commands.command()
+    async def maths(self, ctx, *, args):
+        print(args)
+        await ctx.message.delete()
+        if "+" in args:
+            list = args.split("+")
+            output = int(list[0]) + int(list[1])
+            output = str(output)
+            await ctx.send(f"The answer is {output}")
+        elif "*" in args:
+            list = args.split("*")
+            output = int(list[0]) * int(list[1])
+            await ctx.send(f"The answer is {output}")
+        elif "/" in args:
+            list = args.split("/")
+            output = int(list[0]) / int(list[1])
+            await ctx.send(f"The answer is {output}")
+        elif "-" in args:
+            list = args.split("-")
+            output = int(list[0]) - int(list[1])
+            await ctx.send(f"The answer is {output}")
 
 
 def setup(client):
