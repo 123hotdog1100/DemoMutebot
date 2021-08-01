@@ -47,6 +47,7 @@ class fun_commands(commands.Cog):
             await response.delete()
 
     @commands.command()
+    @commands.cooldown(1, 15, commands.BucketType.user)
     async def maths(self, ctx, *, args):
         print(args)
         await ctx.message.delete()
@@ -67,6 +68,16 @@ class fun_commands(commands.Cog):
             list = args.split("-")
             output = int(list[0]) - int(list[1])
             await ctx.send(f"The answer is {output}")
+
+    @maths.error
+    async def maths(self, ctx, error):
+        if isinstance(error, discord.ext.commands.CommandOnCooldown):
+            response = await ctx.send("This command is on cooldown")
+            await asyncio.sleep(2)
+            await response.delete()
+        else:
+            print(error)
+            pass
 
 
 def setup(client):
