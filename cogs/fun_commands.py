@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import random
 import asyncio
-
+from .DemoAPI import getlatestclip
 
 # This file is to deal with all of the private message issues
 class fun_commands(commands.Cog):
@@ -78,6 +78,16 @@ class fun_commands(commands.Cog):
         else:
             print(error)
             pass
+
+    @commands.command()
+    @commands.cooldown(1, 15, commands.BucketType.user)
+    async def latestclip(self, ctx):
+        await ctx.message.delete()
+        latestURL = getlatestclip(1, "demomute")
+        response = await ctx.send(f"The latest clip is {latestURL}")
+        await asyncio.sleep(5)
+        await response.delete()
+
 
 
 def setup(client):

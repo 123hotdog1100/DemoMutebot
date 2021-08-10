@@ -69,5 +69,4 @@ def getstream(username, oauth):
         print("Getting stream details: ", e)
         return False
 
-
 AUTH = getOauth()

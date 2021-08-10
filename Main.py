@@ -162,7 +162,7 @@ async def Twitch():  ##Runs the twitch check using custom coded twitch api inter
                 pass
         except json.decoder.JSONDecodeError as e:
             print(e)
-    elif not D.check_user(1, username) and done:
+    elif not D.check_user(1, username) and not stream:
         done = False
         chan = client.get_channel(834094513944920124)
         await chan.edit(name="Stream-Offline")

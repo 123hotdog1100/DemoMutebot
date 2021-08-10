@@ -28,3 +28,7 @@ def update(ID):
         return False
     if r.json() == 200:
         return True
+
+def getlatestclip(ID, Username):
+    r = requests.get(BASE + "sync/1", {'Command': 'getlatestclip', 'Username': Username, 'ID': ID})
+    return r.json()
