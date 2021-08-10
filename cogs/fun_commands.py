@@ -85,7 +85,7 @@ class fun_commands(commands.Cog):
         await ctx.message.delete()
         latestURL = getlatestclip(1, "demomute")
         response = await ctx.send(f"The latest clip is {latestURL}")
-        await asyncio.sleep(5)
+        await asyncio.sleep(10)
         await response.delete()
 
 
