@@ -60,7 +60,7 @@ class Game_Servers(commands.Cog):
         sub = discord.utils.get(ctx.guild.roles, name="Twitch Subscriber")  # Gets the role ":)" from the server
         mod = discord.utils.get(ctx.guild.roles, name="Mods")
         await ctx.message.delete()
-        if t1 in ctx.author.roles or mutes in ctx.author.roles or sub in ctx.author.roles or mod in ctx.author.roles:  # Checks if the user that sent the command has the correct role
+        if mutes in ctx.author.roles or sub in ctx.author.roles or mod in ctx.author.roles:  # Checks if the user that sent the command has the correct role
             file = self.file
             author = ctx.author.mention
             if self.check(file, author):
